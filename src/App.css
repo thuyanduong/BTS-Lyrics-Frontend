@@ -1,3 +1,46 @@
+.highlight {
+  background-color: yellow;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.lyrics-box {
+  text-align: left;
+  margin: auto;
+}
+
+.lyrics-box > div:nth-of-type(odd) {
+    background-color: #F8F8F8;
+}
+
+.lyrics-box > div:nth-of-type(even) {
+    background-color: #F0F0F0;
+}
+
+.lyrics-row {
+  padding-top: 0.2rem!important;
+  padding-bottom: 0.2rem!important;
+}
+
+.album-container {
+  width: 80%;
+  margin: auto!important;
+  margin-bottom: 10px!important;
+}
+
+.album-image {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+textarea {
+  width: 40%;
+  height: 500px;
+  resize: none;
+}
+
 .App {
   text-align: center;
 }
