@@ -2,6 +2,7 @@ import React from 'react'
 import {withRouter} from 'react-router-dom'
 import matchLine from '../../_helpers/matchLine'
 import {Link} from 'react-router-dom'
+//styling
 
 class ResultItem extends React.PureComponent {
   constructor(props){

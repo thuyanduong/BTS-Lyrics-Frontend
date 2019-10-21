@@ -7,17 +7,17 @@ class Navbar extends React.Component {
       <div className="ui inverted menu">
         <Link to="/">
           <div className="item">
-            Home
+            Search
           </div>
         </Link>
-        <Link to="/search-lyrics">
+        <Link to="/albums">
           <div className="item">
-            Search Lyrics
+            Albums
           </div>
         </Link>
-        <Link to="/search-translation">
+        <Link to="/songs">
           <div className="item">
-            Search By Translation
+            Songs
           </div>
         </Link>
 

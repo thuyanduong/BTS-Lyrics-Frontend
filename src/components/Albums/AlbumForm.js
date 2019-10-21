@@ -6,8 +6,9 @@ import URL from '../../_helpers/url'
 import moment from 'moment'
 import NotFound from '../NotFound'
 import slugify from '../../_helpers/slugifier'
+import {BeatLoader} from 'react-spinners'
 
-class AlbumForm extends React.PureComponent{
+class AlbumForm extends React.Component{
   state = {
     id: null,
     album_type_id: "1",
@@ -30,7 +31,7 @@ class AlbumForm extends React.PureComponent{
 
   fetchAlbum = () => {
     if(this.props.match.params.slug){
-      fetch(`${URL}/albums/${this.props.match.params.slug}`)
+      fetch(`${URL}/album-by-title/${this.props.match.params.slug}`)
       .then(res => res.json())
       .then(album => {
         if(album){
@@ -77,6 +78,7 @@ class AlbumForm extends React.PureComponent{
   resetForm = () => {
     this.setState({
       id: null,
+      album_type_id: 1,
       title: "",
       release_date: "",
       image_url: "",
@@ -89,56 +91,68 @@ class AlbumForm extends React.PureComponent{
   }
 
   redirect = () => {
-    this.props.history.push('/')
+    this.props.history.push('/albums')
   }
 
-  generateButtons(){
+  renderButtons(){
     return (this.state.mode === "Add" ?
       (<div>
-        <input onClick={(e) => this.onSubmit(e, {
+        <input className="ui button" onClick={(e) => this.onSubmit(e, {
           method:"POST",
           verify:this.validateFields,
           callback:this.resetForm
-        })} type="submit" value="Create Album"/>
+        })} type="submit" value="Add Album"/>
       </div>)
       :
       (<div>
-        <input onClick={(e) => this.onSubmit(e, {
+        <input className="ui button" onClick={(e) => this.onSubmit(e, {
           method: "PATCH",
           verify: this.validateFields,
           callback: this.redirect
         })} type="submit" value="Save"/>
-        <input onClick={(e) => this.onSubmit(e, {
+        <input className="ui button basic" onClick={(e) => this.onSubmit(e, {
           method: "DELETE",
           verify: this.confirmDelete,
           callback: this.redirect
-        })} type="submit" value="Delete"/>
+        })} type="button" value="Delete"/>
       </div>)
     )
   }
 
   render(){
     return(
-      this.state.albumTypesLoading || this.state.albumLoading ? null : (
+      this.state.albumTypesLoading || this.state.albumLoading ? <BeatLoader/> : (
         this.state.notFound ? <NotFound/> : (
-          <div>{this.state.mode === "Add" ? "Add New Album" : "Edit Album"}
-              <form>
-                <select name="album_type_id" disabled={this.state.mode==="Edit"}
-                value={this.state.album_type_id} onChange={this.onChangeForm}>
-                  {this.state.albumTypes.map(option => (
-                    <option key={option.id} value={option.id}
-                     >{option.category}</option>
-                  ))}
-                </select>
-                <input type="text" name="title" placeholder="Album Title"
-                  value={this.state.title}  onChange={this.onChangeForm}/>
-                <input type="date" name="release_date" placeholder="Release Date"
-                  value={this.state.release_date}  onChange={this.onChangeForm}/>
-                <input type="text" name="image_url" placeholder="Image URL"
-                  value={this.state.image_url}  onChange={this.onChangeForm}/>
-                <input type="text" name="music_url" placeholder="Music URL"
-                  value={this.state.music_url} onChange={this.onChangeForm} />
-                {this.generateButtons()}
+          <div className="ui container segment">
+              <h3>{this.state.mode === "Add" ? "Add New Album" : "Edit Album"}</h3>
+              <div className="ui divider hidden"></div>
+              <form className="ui form">
+                <div className="field">
+                  <select className="ui selection dropdown" name="album_type_id" value={this.state.album_type_id}
+                    onChange={this.onChangeForm}>
+                    {this.state.albumTypes.map(option => (
+                      <option key={option.id} value={option.id}
+                       >{option.category}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="field">
+                  <input type="text" name="title" placeholder="Album Title"
+                    value={this.state.title}  onChange={this.onChangeForm}/>
+                </div>
+                <div className="field">
+                  <input type="date" name="release_date" placeholder="Release Date"
+                    value={this.state.release_date}  onChange={this.onChangeForm}/>
+                </div>
+                <div className="field">
+                  <input type="text" name="image_url" placeholder="Image URL"
+                    value={this.state.image_url}  onChange={this.onChangeForm}/>
+                </div>
+                <div className="field">
+                  <input type="text" name="music_url" placeholder="Music URL"
+                    value={this.state.music_url} onChange={this.onChangeForm} />
+                </div>
+                {this.renderButtons()}
               </form>
           </div>
         )
@@ -147,8 +161,4 @@ class AlbumForm extends React.PureComponent{
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  submit: (resource, info, options)=>{dispatch(submit(resource, info, options))},
-})
-
-export default withRouter(connect(null, mapDispatchToProps)(AlbumForm))
+export default withRouter(connect(null, {submit})(AlbumForm))

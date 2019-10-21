@@ -19,11 +19,13 @@ class TranslationSearcher extends React.PureComponent{
   render(){
     return(
       <div>
-        <div className="ui fluid action input">
-          <input onChange={this.onChange} type="text" placeholder="Search By Translation..." />
-          <div onClick={this.redirect}
-            className="ui button">Search By Translation
-          </div>
+        <div>
+          <form className="ui fluid action input" onSubmit={this.redirect}>
+            <input onChange={this.onChange} type="text" placeholder="Search By Translation..." />
+            <button
+              className="ui button">Search By Translation
+            </button>
+          </form>
         </div>
       </div>
     )

@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import ResultItem from './ResultItem'
 import shuffle from '../../_helpers/shuffleArray'
+//styling
 
 class SearchResultsList extends React.PureComponent{
   generateResultItem = (song) => {

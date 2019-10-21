@@ -5,6 +5,7 @@ import SearchResultsList from './SearchResultsList'
 import {fetchingResults} from '../../redux/actionCreators'
 import {connect} from 'react-redux'
 import {ScaleLoader} from 'react-spinners'
+//styling
 
 class SearchResultsPage extends React.PureComponent{
   componentDidMount(){

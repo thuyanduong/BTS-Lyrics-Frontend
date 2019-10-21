@@ -1,13 +1,39 @@
 import {combineReducers} from 'redux'
-import {FETCHED_RESULTS, ADD_ALBUM, ADD_SONG, UPDATE_SONG, DELETE_SONG,
-  LOADING, UPDATE_ALBUM, FETCHED_DATA, DELETE_ALBUM, LOADING_SEARCH_RESULTS} from './actions'
+import {FETCHED_RESULTS, CREATE_ALBUM, CREATE_SONG, UPDATE_SONG, DELETE_SONG,
+  LOADING_DATA, UPDATE_ALBUM, FETCHED_DATA, DELETE_ALBUM, LOADING_SEARCH_RESULTS,
+  UPDATE_TRACKS, LOADING_SONGS, FETCHED_SONGS} from './actions'
 
 const initialState = {
   searchResults: [],
   query: "",
-  albums: [],
-  loading: false,
+  songs: [],
+  loadingSongs: false,
+  albumTypes: [],
+  loadingData: false,
   loadingSearchResults: false
+}
+
+function songsReducer(state=initialState.songs, action){
+  switch (action.type) {
+    case FETCHED_SONGS:
+      return action.songs
+    case CREATE_SONG:
+      return [...state, action.song].sort((a, b) => a.title.localeCompare(b.title))
+    case DELETE_SONG: {
+      let newState = [...state]
+      let index = newState.findIndex(song => song.id === action.song.id)
+      newState.splice(index, 1)
+      return newState
+    }
+    case UPDATE_SONG: {
+      let newState = [...state]
+      let index = newState.findIndex(song => song.id === action.song.id)
+      newState[index] = action.song
+      return newState.sort((a, b) => a.title.localeCompare(b.title))
+    }
+    default:
+      return state
+  }
 }
 
 function searchResultsReducer(state=initialState.searchResults, action){
@@ -28,52 +54,52 @@ function queryReducer(state=initialState.query, action){
   }
 }
 
-function albumsReducer(state=initialState.albums, action){
+function albumTypesReducer(state=initialState.albumTypes, action){
   switch(action.type){
     case FETCHED_DATA:
       return action.albums
-    case ADD_ALBUM: {
-      //Find the albumsList this album is in, add the album, and sort
+    case CREATE_ALBUM: {
       let albums = state.find(category => category.id === action.album.album_type_id).albums
       albums.unshift(action.album)
-      albums.sort((a,b) => b.release_date.localeCompare(a.release_date))
+      albums.sort((a,b) => a.release_date.localeCompare(b.release_date))
       return [...state]
     }
     case UPDATE_ALBUM: {
-      //Find the albumsList this album is in, reassign the value, and sort
+      state.forEach(albumType => {
+        albumType.albums = albumType.albums.filter(album => album.id !== action.album.id)
+      })
       let albums = state.find(category => category.id === action.album.album_type_id).albums
-      albums[albums.indexOf(albums.find(album => album.id === action.album.id))] = action.album
-      albums.sort((a,b) => b.release_date.localeCompare(a.release_date))
+      albums.push(action.album)
+      albums.sort((a,b) => a.release_date.localeCompare(b.release_date))
       return [...state]
     }
     case DELETE_ALBUM: {
-      //Find the albumsList this album is in, filter it out, no need to sort
       let category = state[state.indexOf(state.find(category => category.id === action.album.album_type_id))]
       category.albums = category.albums.filter(a => a.id !== action.album.id)
       return [...state]
     }
-    case ADD_SONG: {
-      //Find the albumsList this song is in, then find the songList, add the song, and sort
-      let albums = state.find(category => category.id === action.song.album_type_id).albums
-      let songs = albums.find(album => album.id === action.song.album_id).songs
-      songs.push(action.song)
-      songs.sort((a,b) => a.track_number - b.track_number)
+    case UPDATE_TRACKS: {
+      let albums = state.find(category => category.id === action.album.album_type_id).albums
+      let album = albums.find(a => a.id === action.album.id)
+      album.tracks = action.album.tracks
       return [...state]
     }
     case UPDATE_SONG: {
-      //Find the albumsList this song is in, then find the songList, reassign the value, and sort
-      let albums = state.find(category => category.id === action.song.album_type_id).albums
-      let songs = albums.find(album => album.id === action.song.album_id).songs
-      songs[songs.indexOf(songs.find(song => song.id === action.song.id))] = action.song
-      songs.sort((a,b) => a.track_number - b.track_number)
+      action.song.tracks.forEach( track => {
+        let albumType = state.find(albumType => albumType.id === track.album.album_type_id)
+    		let album = albumType.albums.find(album => album.id === track.album.id)
+    		let t = album.tracks.find(track => track.song.id === action.song.id)
+        t.song = {...action.song}
+        delete t.song.tracks
+      })
       return [...state]
     }
     case DELETE_SONG: {
-      //Find the albumsList this song is in, then find the songList, filter it out, no need to sort
-      // debugger
-      let category = state[state.indexOf(state.find(category => category.id === action.song.album_type_id))]
-      let album = category.albums.find(album => album.id === action.song.album_id)
-      album.songs = album.songs.filter(a => a.id !== action.song.id)
+      action.song.tracks.forEach( track => {
+        let albumType = state.find(albumType => albumType.id === track.album.album_type_id)
+    		let tracks = albumType.albums.find(album => album.id === track.album.id).tracks
+    		tracks = tracks.filter(t => t.song.id !== action.song.id)
+      })
       return [...state]
     }
     default:
@@ -81,11 +107,22 @@ function albumsReducer(state=initialState.albums, action){
   }
 }
 
-function loadingReducer(state=initialState.loading, action){
+function loadingDataReducer(state=initialState.loadingData, action){
   switch(action.type){
     case FETCHED_DATA:
       return false
-    case LOADING:
+    case LOADING_DATA:
+      return true
+    default:
+      return state
+  }
+}
+
+function loadingSongsReducer(state=initialState.loadingSongs, action){
+  switch(action.type){
+    case FETCHED_SONGS:
+      return false
+    case LOADING_SONGS:
       return true
     default:
       return state
@@ -105,8 +142,10 @@ function loadingSearchResultsReducer(state=initialState.loadingSearchResults, ac
 
 export default combineReducers({
   searchResults: searchResultsReducer,
-  albums: albumsReducer,
-  loading: loadingReducer,
+  albumTypes: albumTypesReducer,
+  loadingData: loadingDataReducer,
   loadingSearchResults: loadingSearchResultsReducer,
-  query: queryReducer
+  query: queryReducer,
+  songs: songsReducer,
+  loadingSongs: loadingSongsReducer
 })

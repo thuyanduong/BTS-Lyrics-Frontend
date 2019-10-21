@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "history": "^4.9.0",
+    "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -13,7 +14,8 @@
     "react-scripts": "2.1.8",
     "react-spinners": "^0.5.3",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-react": "^0.88.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -5,15 +5,20 @@ import URL from '../../_helpers/url'
 import {ScaleLoader} from 'react-spinners'
 import {HashLink as Link} from 'react-router-hash-link';
 import removeWhiteSpace from '../../_helpers/removeWhiteSpace'
+//styling
 
 class SongDetails extends React.PureComponent{
   state = {
     loading: true,
     notFound: false,
+
+    slug: '',
+    title: '',
     lyrics: '',
     translation: '',
     queryType: 'none',
-    searchTerm: ''
+    searchTerm: '',
+    albums: []
   }
 
   componentDidMount(){
@@ -27,7 +32,7 @@ class SongDetails extends React.PureComponent{
   }
 
   fetchSong = () => {
-    fetch(`${URL}/songs/${this.props.match.params.slug}`)
+    fetch(`${URL}/song-by-title/${this.props.match.params.slug}`)
     .then(res => res.json())
     .then(song => {
       if(song){
@@ -38,7 +43,7 @@ class SongDetails extends React.PureComponent{
     })
   }
 
-  generateHighLightedSpan = (type, line) => {
+  renderHighLightedSpan = (type, line) => {
     if(!line){
       return '<span>&nbsp;</span>'
     }
@@ -49,7 +54,7 @@ class SongDetails extends React.PureComponent{
     return span
   }
 
-  generateLyricsBox = () => {
+  renderLyricsBox = () => {
     let lyricsArray = this.state.lyrics.split('\n')
     let transArray = this.state.translation.split('\n')
     let mainArray = transArray.length > lyricsArray.length ? transArray :lyricsArray
@@ -58,10 +63,10 @@ class SongDetails extends React.PureComponent{
         return (
           <div className="ui grid" key={index}>
             <span className="eight wide column lyrics lyrics-row"
-              dangerouslySetInnerHTML={{__html: this.generateHighLightedSpan('lyrics', lyricsArray[index])}}>
+              dangerouslySetInnerHTML={{__html: this.renderHighLightedSpan('lyrics', lyricsArray[index])}}>
             </span>
             <span className="eight wide column translation lyrics-row"
-                dangerouslySetInnerHTML={{__html: this.generateHighLightedSpan('translation', transArray[index])}}>
+                dangerouslySetInnerHTML={{__html: this.renderHighLightedSpan('translation', transArray[index])}}>
             </span>
           </div>
         )
@@ -69,7 +74,7 @@ class SongDetails extends React.PureComponent{
     )
   }
 
-  generateMediaIcons = () => {
+  renderMediaIcons = () => {
     return(
       <div>
         {this.state.music_url.includes('soundcloud.com') ? <a target="_blank" rel="noopener noreferrer" href={this.state.music_url}>
@@ -85,19 +90,24 @@ class SongDetails extends React.PureComponent{
     )
   }
 
+  renderAlbum = () => {
+    return this.state.albums.length === 0 ? null : (<div className="ui black label">
+        <Link to={`/albums/#${this.state.albums[0].slug}`}>
+          <i>{this.state.albums[0].title}</i>
+        </Link>
+      </div>
+    )
+  }
+
   render(){
-    return this.state.notFound ? <NotFound/> :(
+    return this.state.notFound ? <NotFound/> : (
       this.state.loading ? <ScaleLoader/> : (
         <div>
           <div className="ui segment song-container">
             <div className="container">
               <h2>{this.state.title}</h2>
-              <div className="ui black label">
-                <Link to={`/#${this.state.album.slug}`}>
-                  <i>{this.state.album.title}</i>
-                </Link>
-              </div>
-              {this.generateMediaIcons()}
+              {this.renderAlbum()}
+              {this.renderMediaIcons()}
               {
                 this.state.translator ? <p>{`Translation by `}
                   <a target="_blank" rel="noopener noreferrer"  href={this.state.translator_url}>
@@ -107,17 +117,16 @@ class SongDetails extends React.PureComponent{
               }
             </div>
             <div className="container lyrics-box" style={{marginTop: "40px", marginBottom: "20px"}}>
-              {this.generateLyricsBox()}
+              {this.renderLyricsBox()}
             </div>
           </div>
           {
             <div>
-              <Link to={`/songs/${this.state.id}/edit`}><button>
-                Edit Song
-              </button></Link>
-              <Link to={`/#${this.state.album.slug}`}><button>
-                Home
-              </button></Link>
+              <Link to={`/songs/${this.state.slug}/edit`}>
+                <button>
+                  Edit Song
+                </button>
+              </Link>
             </div>
           }
         </div>
