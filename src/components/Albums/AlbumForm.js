@@ -6,7 +6,7 @@ import URL from '../../_helpers/url'
 import moment from 'moment'
 import NotFound from '../NotFound'
 import slugify from '../../_helpers/slugifier'
-import {BeatLoader} from 'react-spinners'
+import {ScaleLoader} from 'react-spinners'
 
 class AlbumForm extends React.Component{
   state = {
@@ -120,10 +120,10 @@ class AlbumForm extends React.Component{
   }
 
   render(){
-    return(
-      this.state.albumTypesLoading || this.state.albumLoading ? <BeatLoader/> : (
+    return this.props.user && this.props.user.admin ? (
+      this.state.albumTypesLoading || this.state.albumLoading ? <ScaleLoader/> : (
         this.state.notFound ? <NotFound/> : (
-          <div className="ui container segment">
+          <div className="ui container segment" style={{backgroundColor: "#f8f8f9"}}>
               <h3>{this.state.mode === "Add" ? "Add New Album" : "Edit Album"}</h3>
               <div className="ui divider hidden"></div>
               <form className="ui form">
@@ -157,8 +157,12 @@ class AlbumForm extends React.Component{
           </div>
         )
       )
-    )
+    ) : <NotFound />
   }
 }
 
-export default withRouter(connect(null, {submit})(AlbumForm))
+const mapStateToProps = state => ({
+  user: state.currentUser
+})
+
+export default withRouter(connect(mapStateToProps, {submit})(AlbumForm))

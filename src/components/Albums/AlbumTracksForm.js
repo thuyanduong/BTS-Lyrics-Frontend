@@ -2,7 +2,7 @@ import React from 'react'
 import URL from '../../_helpers/url'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {BeatLoader} from 'react-spinners'
+import {ScaleLoader} from 'react-spinners'
 import { Dropdown } from 'semantic-ui-react'
 import NotFound from '../NotFound'
 import {submit} from '../../redux/actionCreators'
@@ -114,7 +114,7 @@ class AlbumTracksForm extends React.Component {
     return (
       <div className="ui items message album-container">
         <h2>{this.state.title}</h2>
-        <img className="album-image" src={this.state.image_url} alt={this.state.title} />
+        <img className="album-art" src={this.state.image_url} alt={this.state.title} />
         <p>Release Date: {this.state.release_date}</p>
         <form className="ui form" id="tracks-form">
           {this.state.tracks.map((track, index) => <this.TrackForm
@@ -155,24 +155,27 @@ class AlbumTracksForm extends React.Component {
   }
 
   render(){
-    return this.state.albumLoading || this.props.songsLoading ? <BeatLoader/> : (
-      this.state.notFound ? <NotFound/> : (
-        <div>
-          {this.albumDiv()}
-          <button className="ui button" onClick={(e) => this.onSubmit(e, {
-            method: "PUT",
-            verify: this.validateSongs,
-            callback: this.redirect
-          })}>Save</button>
-        </div>
+    return this.props.user && this.props.user.admin ? (
+      this.state.albumLoading || this.props.songsLoading ? <ScaleLoader/> : (
+        this.state.notFound ? <NotFound/> : (
+          <div>
+            {this.albumDiv()}
+            <button className="ui button" onClick={(e) => this.onSubmit(e, {
+              method: "PUT",
+              verify: this.validateSongs,
+              callback: this.redirect
+            })}>Save</button>
+          </div>
+        )
       )
-    )
+    ) : <NotFound />
   }
 }
 
 const mapStateToProps = (state) => ({
   songs: state.songs,
-  songsLoading: state.loadingSongs
+  songsLoading: state.loadingSongs,
+  user: state.currentUser
 })
 
 export default withRouter(connect(mapStateToProps, {submit})(AlbumTracksForm))

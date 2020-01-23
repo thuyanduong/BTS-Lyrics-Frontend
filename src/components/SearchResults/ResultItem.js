@@ -8,15 +8,15 @@ class ResultItem extends React.PureComponent {
   constructor(props){
     super(props)
     this.state = {
-      queryType: this.props.query.split("=")[0],
-      searchTerm: this.props.query.split("=")[1],
+      queryType: this.props.query.lyrics ? "lyrics" : "translation",
+      searchTerm: this.props.query.lyrics ? this.props.query.lyrics : this.props.query.translation,
       lyricsArray: props.song.lyrics.split("\n"),
       transArray: props.song.translation.split("\n")
     }
   }
 
   getTitle = () => (
-    <div className="ui black label">
+    <div className="ui gray label">
       <Link to={`/songs/${this.props.song.slug}${this.props.location.search}`}>
         <i>{this.props.song.title}</i>
       </Link>
@@ -26,29 +26,29 @@ class ResultItem extends React.PureComponent {
   getLines = () => {
     let isLyrics = this.state.queryType === "lyrics"
     let array = isLyrics ? this.state.lyricsArray : this.state.transArray
-    let index = array.findIndex(line => matchLine(line, this.state.searchTerm))
+    let index = array.findIndex((line, i) => matchLine(line, this.state.searchTerm))
     return (
       <React.Fragment>
-        <div className={isLyrics ? "bold" : ""}>
+        <p className={isLyrics ? "bold" : ""}>
           {this.state.lyricsArray[index]}
-        </div>
-        <div className={isLyrics ? "" : "bold"}>
+        </p>
+        <p className={isLyrics ? "" : "bold"}>
           {this.state.transArray[index]}
-        </div>
+        </p>
       </React.Fragment>
     )
   }
 
   render(){
     return(
-      <li className="list-group-item">
+      <div className="item">
       {
         this.getLines()
       }
       {
         this.getTitle()
       }
-      </li>
+      </div>
     )
   }
 }

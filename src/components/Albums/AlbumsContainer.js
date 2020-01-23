@@ -4,8 +4,16 @@ import NotFound from '../NotFound'
 import AlbumForm from './AlbumForm'
 import AlbumsList from './AlbumsList'
 import AlbumTracksForm from './AlbumTracksForm'
+import {fetchingData} from '../../redux/actionCreators'
+import {connect} from 'react-redux'
 
 class AlbumsContainer extends React.PureComponent{
+  componentDidMount(){
+    if(this.props.albumTypes.length === 0){
+      this.props.fetchingData()
+    }
+  }
+
   render(){
     return(
       <Switch>
@@ -19,4 +27,8 @@ class AlbumsContainer extends React.PureComponent{
   }
 }
 
-export default AlbumsContainer
+const mapStateToProps = state => ({
+  albumTypes: state.albumTypes
+})
+
+export default connect(mapStateToProps, {fetchingData})(AlbumsContainer)

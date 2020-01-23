@@ -4,8 +4,16 @@ import SongForm from './SongForm'
 import SongDetails from './SongDetails'
 import NotFound from '../NotFound'
 import SongsList from './SongsList'
+import {fetchingSongs} from '../../redux/actionCreators'
+import {connect} from 'react-redux'
 
 class SongContainer extends React.PureComponent{
+  componentDidMount(){
+    if(this.props.songs.length === 0){
+      this.props.fetchingSongs()
+    }
+  }
+
   render(){
     return(
       <Switch>
@@ -19,4 +27,8 @@ class SongContainer extends React.PureComponent{
   }
 }
 
-export default SongContainer
+const mapStateToProps = state => ({
+  songs: state.songs
+})
+
+export default connect(mapStateToProps, {fetchingSongs})(SongContainer)

@@ -5,7 +5,7 @@ import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {submit, fetchingData} from '../../redux/actionCreators'
 import slugify from '../../_helpers/slugifier'
-import {BeatLoader} from 'react-spinners'
+import {ScaleLoader} from 'react-spinners'
 
 class SongForm extends React.PureComponent{
   state = {
@@ -118,10 +118,10 @@ class SongForm extends React.PureComponent{
   }
 
   render(){
-    return(
-      this.state.loading ? <BeatLoader /> : (
+    return this.props.user && this.props.user.admin ? (
+      this.state.loading ? <ScaleLoader /> : (
         this.state.notFound ? <NotFound/> : (
-          <div className="ui container segment">
+          <div className="ui container segment" style={{backgroundColor: "#f8f8f9"}}>
             <h3>{this.state.mode === "Add" ? "Add New Song" : "Edit Song"}</h3>
             <div className="ui divider hidden"></div>
             <form className="ui form">
@@ -169,8 +169,12 @@ class SongForm extends React.PureComponent{
           </div>
         )
       )
-    )
+    ) : <NotFound />
   }
 }
 
-export default withRouter(connect(null, {submit, fetchingData})(SongForm))
+const mapStateToProps = state => ({
+  user: state.currentUser
+})
+
+export default withRouter(connect(mapStateToProps, {submit, fetchingData})(SongForm))

@@ -5,29 +5,31 @@ import URL from '../../_helpers/url'
 import {ScaleLoader} from 'react-spinners'
 import {HashLink as Link} from 'react-router-hash-link';
 import removeWhiteSpace from '../../_helpers/removeWhiteSpace'
-//styling
+import {connect} from 'react-redux'
+import LyricsFormatOptions from './LyricsFormatOptions'
+import queryString from 'query-string'
 
 class SongDetails extends React.PureComponent{
-  state = {
-    loading: true,
-    notFound: false,
-
-    slug: '',
-    title: '',
-    lyrics: '',
-    translation: '',
-    queryType: 'none',
-    searchTerm: '',
-    albums: []
+  constructor(){
+    super()
+    this.state = {
+      loading: true,
+      notFound: false,
+      queryType: 'none',
+      searchTerm: '',
+      radioButton: 'default'
+    }
   }
 
   componentDidMount(){
     this.fetchSong()
-    let [queryType, searchTerm] = this.props.location.search.split("=")
-    if(queryType.includes('lyrics')){
-      this.setState({queryType: 'lyrics', searchTerm})
-    }else if(queryType.includes('translation')){
-      this.setState({queryType: 'translation', searchTerm})
+    let query = queryString.parse(this.props.location.search)
+    if(query.line){
+      this.setState({queryType: 'line', searchTerm: decodeURIComponent(query.line)})
+    }else if(query.lyrics){
+      this.setState({queryType: 'lyrics', searchTerm: decodeURIComponent(query.lyrics)})
+    }else if(query.translation){
+      this.setState({queryType: 'translation', searchTerm: decodeURIComponent(query.translation)})
     }
   }
 
@@ -43,17 +45,6 @@ class SongDetails extends React.PureComponent{
     })
   }
 
-  renderHighLightedSpan = (type, line) => {
-    if(!line){
-      return '<span>&nbsp;</span>'
-    }
-    if(type !== this.state.queryType){return line}
-    let reg = `(${removeWhiteSpace(this.state.searchTerm).split('').join('\\s*')})`
-    let regExp = new RegExp(reg, 'gi');
-    let span = line.replace(regExp, '<span class="highlight">$1</span>');
-    return span
-  }
-
   renderLyricsBox = () => {
     let lyricsArray = this.state.lyrics.split('\n')
     let transArray = this.state.translation.split('\n')
@@ -62,16 +53,41 @@ class SongDetails extends React.PureComponent{
       mainArray[0].length ? mainArray.map((x, index) => {
         return (
           <div className="ui grid" key={index}>
-            <span className="eight wide column lyrics lyrics-row"
-              dangerouslySetInnerHTML={{__html: this.renderHighLightedSpan('lyrics', lyricsArray[index])}}>
-            </span>
-            <span className="eight wide column translation lyrics-row"
-                dangerouslySetInnerHTML={{__html: this.renderHighLightedSpan('translation', transArray[index])}}>
-            </span>
+            {this.renderRow(index, lyricsArray, transArray)}
           </div>
         )
       }) : null
     )
+  }
+
+  renderRow = (index, lyricsArray, transArray) => {
+    if(this.state.queryType === 'line'){
+      var searchTerm = removeWhiteSpace(this.state.searchTerm)
+      var lyrics = removeWhiteSpace(lyricsArray[index])
+      var trans = removeWhiteSpace(transArray[index])
+      var match = (searchTerm === lyrics || searchTerm === trans) ? true : false
+    }
+    return (
+      <React.Fragment>
+        <span className={`eight wide column lyrics lyrics-row ${match? "line" : ""}`}
+          dangerouslySetInnerHTML={{__html: this.renderHighLightedSpan('lyrics', lyricsArray[index])}}>
+        </span>
+        <span className={`eight wide column translation lyrics-row ${match? "line" : ""}`}
+            dangerouslySetInnerHTML={{__html: this.renderHighLightedSpan('translation', transArray[index])}}>
+        </span>
+      </React.Fragment>
+    )
+  }
+
+  renderHighLightedSpan = (type, line) => {
+    if(!line){
+      return '<span>&nbsp;</span>'
+    }else if(type === this.state.queryType){
+      let reg = `(${removeWhiteSpace(this.state.searchTerm).split('').join('\\s*')})`
+      let regExp = new RegExp(reg, 'gi');
+      return line.replace(regExp, '<span class="highlight">$1</span>');
+    }
+    return line
   }
 
   renderMediaIcons = () => {
@@ -90,23 +106,40 @@ class SongDetails extends React.PureComponent{
     )
   }
 
-  renderAlbum = () => {
-    return this.state.albums.length === 0 ? null : (<div className="ui black label">
-        <Link to={`/albums/#${this.state.albums[0].slug}`}>
-          <i>{this.state.albums[0].title}</i>
+  renderAlbums = () => this.state.albums.length === 0 ? null : (
+    <div>
+    {
+      this.state.albums.map(album => (
+        <Link to={`/albums/#${album.slug}`} className="ui gray small label" key={album.id}>
+          <i>{album.title}</i>
         </Link>
-      </div>
-    )
-  }
+      ))
+    }
+    </div>
+  )
+
+
+  renderEditButton = () => this.props.user && this.props.user.admin ? (<div>
+      <Link to={`/songs/${this.state.slug}/edit`}>
+        <button className="ui button">
+          Edit Song
+        </button>
+      </Link>
+    </div>
+  ) : null
+
+  renderLyricsOptions = () => this.props.user && this.props.user.admin ? (
+    <LyricsFormatOptions value={this.state.radioButton}/>
+  ) : null
 
   render(){
     return this.state.notFound ? <NotFound/> : (
       this.state.loading ? <ScaleLoader/> : (
-        <div>
-          <div className="ui segment song-container">
-            <div className="container">
+        <React.Fragment>
+          <div className="ui segment">
+            <div className="ui container">
               <h2>{this.state.title}</h2>
-              {this.renderAlbum()}
+              {this.renderAlbums()}
               {this.renderMediaIcons()}
               {
                 this.state.translator ? <p>{`Translation by `}
@@ -116,23 +149,21 @@ class SongDetails extends React.PureComponent{
                 </p> : null
               }
             </div>
-            <div className="container lyrics-box" style={{marginTop: "40px", marginBottom: "20px"}}>
+            <div className="ui container lyrics-box" style={{marginTop: "40px", marginBottom: "20px"}}>
               {this.renderLyricsBox()}
             </div>
+            {
+              this.renderEditButton()
+            }
           </div>
-          {
-            <div>
-              <Link to={`/songs/${this.state.slug}/edit`}>
-                <button>
-                  Edit Song
-                </button>
-              </Link>
-            </div>
-          }
-        </div>
+        </React.Fragment>
       )
     )
   }
 }
 
-export default withRouter(SongDetails)
+const mapStateToProps = state => ({
+  user: state.currentUser
+})
+
+export default withRouter(connect(mapStateToProps)(SongDetails))

@@ -1,7 +1,7 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
 
-class LyricsSearcher extends React.PureComponent{
+class TranslationSearcher extends React.PureComponent{
   state = {
     searchTerm: ''
   }
@@ -13,7 +13,7 @@ class LyricsSearcher extends React.PureComponent{
   }
 
   redirect = () => {
-    this.props.history.push(`/search-results?lyrics=${this.state.searchTerm}`)
+    this.props.history.push(`/search-results?translation=${this.state.searchTerm}`)
   }
 
   render(){
@@ -21,9 +21,9 @@ class LyricsSearcher extends React.PureComponent{
       <div>
         <div>
           <form className="ui fluid action input" onSubmit={this.redirect}>
-            <input onChange={this.onChange} type="text" placeholder="Search By Lyrics..." />
+            <input onChange={this.onChange} type="text" placeholder="Search By Translation..." />
             <button
-              className="ui button">Search By Lyrics
+              type="submit" className="ui button">Search By Translation
             </button>
           </form>
         </div>
@@ -32,4 +32,4 @@ class LyricsSearcher extends React.PureComponent{
   }
 }
 
-export default withRouter(LyricsSearcher)
+export default withRouter(TranslationSearcher)
