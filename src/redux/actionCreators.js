@@ -151,8 +151,12 @@ const deleteCategory = (category) => ({type: ACTIONTYPE.DELETE_CATEGORY, categor
 const setActiveCategory = (category, flashCards) => ({type: ACTIONTYPE.SET_ACTIVE_CATEGORY, category, flashCards})
 const resetActiveCategory = () => ({type: ACTIONTYPE.RESET_ACTIVE_CATEGORY})
 const shuffleCategory = (category) => ({type: ACTIONTYPE.SHUFFLE_CATEGORY, category})
+const toggleLanguage = () => ({type: ACTIONTYPE.TOGGLE_LANGUAGE})
+const sortCategories = (sortBy) => ({type: ACTIONTYPE.SORT_CATEGORIES, sortBy})
+const sortFlashCards = (sortBy) => ({type: ACTIONTYPE.SORT_FLASH_CARDS, sortBy})
 
 export {fetchingData, submit, updateAlbum, createAlbum, fetchingFlashCards,
   createSong, deleteAlbum, updateSong, deleteSong, updateTracks, fetchingSongs,
   fetchingUser, logOut, logIn, createCategory, updateCategory, deleteCategory,
-  createCard, deleteCard, updateCard, fetchActiveCategory, resetActiveCategory}
+  createCard, deleteCard, updateCard, fetchActiveCategory, resetActiveCategory,
+  toggleLanguage, sortCategories, sortFlashCards}

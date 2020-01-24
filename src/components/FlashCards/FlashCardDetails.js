@@ -4,6 +4,7 @@ import {Modal} from 'semantic-ui-react'
 import textColor from '../../_helpers/textColor'
 import {submit} from '../../redux/actionCreators'
 import {connect} from 'react-redux'
+const ReactMarkdown = require('react-markdown/with-html')
 
 class FlashCardDetails extends React.Component {
   redirect = (url) => {
@@ -28,14 +29,22 @@ class FlashCardDetails extends React.Component {
   render(){
     let {korean, english, notes, id} = this.props.card
     return (
-      <Modal size="large" open={true}>
+      <Modal size="large" open={true} onClose={()=>this.props.history.push('/')}>
         <Modal.Content>
           <Modal.Description>
             {this.props.card ?
               <div>
-                <p><b>Korean:</b> {korean}</p>
-                <p><b>English:</b> {english}</p>
-                <p><b>Notes:</b> {notes}</p>
+                <p>Korean: {korean}</p>
+                <p>English: {english}</p>
+                <div>
+                  <label>Notes:</label>
+                  <div className="" style={{border: "solid grey"}}>
+                    <ReactMarkdown
+                      source={notes}
+                      escapeHtml={false}
+                    />
+                  </div>
+                </div>
                 <p><b>Categories:</b></p>
                 <div>
                   {this.props.card.categories.map(category => (

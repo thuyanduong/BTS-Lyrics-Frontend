@@ -31,7 +31,7 @@ class Navbar extends React.Component {
       <Fragment>
         <Link to={`/`}>
           <div className="item right">
-            My Flash Cards
+            My Flashcards
           </div>
         </Link>
         <Dropdown className='link item' text={this.props.user.username} pointing>

@@ -57,7 +57,7 @@ class CategoryForm extends React.Component {
 
   render(){
     return (
-      <Modal size="small" open={true}>
+      <Modal size="small" open={true} onClose={()=>this.props.history.push('/')}>
         <Modal.Content>
           <Modal.Description>
             <Header>{this.props.edit ? "Edit" : "Add"} Category

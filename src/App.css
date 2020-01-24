@@ -44,6 +44,16 @@
     margin: auto!important;
 }
 
+div.new-flash-card-editor {
+  height: 250px;
+  font-family: Lato, 'Helvetica Neue', Arial,Helvetica, sans-serif;
+  font-size: 1em;
+}
+
+/* div.ui.segment.vertical.flash-cards{
+  padding-top: 0px;
+} */
+
 /* div.side-bar.segments > .segment {
   border-radius: 0.28571429rem;
 } */

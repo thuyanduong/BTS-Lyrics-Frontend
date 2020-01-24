@@ -31,12 +31,21 @@ class FlashCardModal extends React.Component{
   }
 
   onChange = (e) => {
-    this.setState({
-      card: {
-        ...this.state.card,
-        [e.target.name]: e.target.value
-      }
-    })
+    if(e.constructor.name === "SyntheticEvent"){
+      this.setState({
+        card: {
+          ...this.state.card,
+          [e.target.name]: e.target.value
+        }
+      })
+    }else{
+      // this.setState({
+      //   card : {
+      //     ...this.state.card,
+      //     notes: e.target.getContent()
+      //   }
+      // })
+    }
   }
 
   updateCategories = (e, data) => {

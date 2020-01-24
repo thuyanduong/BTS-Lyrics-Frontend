@@ -4,8 +4,8 @@ import {connect} from 'react-redux'
 import NotFound from '../NotFound'
 import CategoriesList from '../Categories/CategorgiesList'
 import FlashCardsList from './FlashCardsList'
-import Profile from './Profile'
-import Filterbar from './Filterbar'
+import CategoryFilter from '../Categories/CategoryFilter'
+import FlashCardFilter from './FlashCardFilter'
 import CategoryForm from '../Categories/CategoryForm'
 import FlashCardModal from './FlashCardModal'
 import {Button} from 'semantic-ui-react'
@@ -15,11 +15,8 @@ class FlashCardsContainer extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      filters: {
-        sortBy: "Created At", //Created At, Updated At, Alphabetically
-        ascending: true,
-        searchTerm: ""
-      }
+      flashCardSearchText: "",
+      categorySearchText: ""
     }
   }
 
@@ -29,33 +26,40 @@ class FlashCardsContainer extends React.Component {
     }
   }
 
-  changeFilter = (event) => {
-    this.setState({
-      filters: {
-        ...this.state.filters,
-        [event.target.name]: event.target.value
-      }
-    })
+  onChange = (event) => {
+    this.setState({[event.target.name]: event.target.value})
   }
 
-  isFiltered = () => {
-    let {filters: {sortBy, ascending, searchTerm}} = this.state
-    if(sortBy === "Created At" && ascending === true && searchTerm === ""){
-      return false
-    }
-    return true
-  }
+  // changeFilter = (event) => {
+  //   this.setState({
+  //     filters: {
+  //       ...this.state.filters,
+  //       [event.target.name]: event.target.value
+  //     }
+  //   })
+  // }
+
+  // isFiltered = () => {
+  //   let {filters: {sortBy, ascending, searchTerm}} = this.state
+  //   if(sortBy === "Created At" && ascending === true && searchTerm === ""){
+  //     return false
+  //   }
+  //   return true
+  // }
 
   filteredCards = () => {
-    let filteredCards = this.flashCards().filter((card) => {
-      if(card.english.toLowerCase().includes(this.state.filters.searchTerm.toLowerCase())){
-        return true
-      }else if(card.korean.includes(this.state.filters.searchTerm)){
-        return true
-      }else{
-        return false
-      }
-    })
+    let filteredCards = this.flashCards()
+    if(this.state.flashCardSearchText !== ""){
+      filteredCards = this.flashCards().filter((card) => {
+        if(card.english.toLowerCase().includes(this.state.flashCardSearchText.toLowerCase())){
+          return true
+        }else if(card.korean.includes(this.state.flashCardSearchText)){
+          return true
+        }else{
+          return false
+        }
+      })
+    }
     return filteredCards
   }
 
@@ -71,36 +75,46 @@ class FlashCardsContainer extends React.Component {
     return cards
   }
 
-  MainComponent = () => (
-    <div className="ui grid segment flash-card-container">
-      <div className="ui four wide column" style={{padding: "0em"}}>
-        <Profile/>
-      </div>
-      <div className="ui twelve wide column" style={{padding: "0em"}}>
-        <Filterbar
-          filters={this.state.filters}
-          isFiltered={this.isFiltered()}
-          changeFilter={this.changeFilter}
-        />
-      </div>
-      <div className="ui four wide column" style={{padding: "0em"}}>
-        <div className="ui segments">
-          <CategoriesList/>
-        </div>
-        <Button onClick={() => this.props.history.push("/categories/new")} style={{marginBottom: "1em"}}>
-          <i className="plus icon"></i>
-          Add Category
-        </Button>
-      </div>
-      <div className="ui twelve wide column" style={{padding: "0em"}}>
-        <div className="ui cards">
-          <FlashCardsList
-            flashCards={this.isFiltered() ? this.filteredCards() : this.flashCards()}
+  MainComponent = () => {
+    let cards = this.filteredCards()
+    return (
+      <div>
+      <div className="ui grid segment flash-card-container">
+        <div className="ui four wide column" style={{padding: "0em"}}>
+          <CategoryFilter
+            onChange={this.onChange}
+            categorySearchText={this.state.categorySearchText}
           />
         </div>
+        <div className="ui twelve wide column" style={{padding: "0em"}}>
+          <FlashCardFilter
+            flashCardSearchText={this.state.flashCardSearchText}
+            onChange={this.onChange}
+            count={cards.length}
+          />
+        </div>
+        <div className="ui four wide column" style={{padding: "0em"}}>
+          <div className="ui segments">
+            <CategoriesList
+              categorySearchText={this.state.categorySearchText}
+            />
+          </div>
+          <Button onClick={() => this.props.history.push("/categories/new")} style={{marginBottom: "1em"}}>
+            <i className="plus icon"></i>
+            Add Category
+          </Button>
+        </div>
+        <div className="ui twelve wide column" style={{padding: "0em"}}>
+          <div className="ui cards">
+            <FlashCardsList
+              flashCards={cards}
+            />
+          </div>
+        </div>
       </div>
-    </div>
-  )
+      </div>
+    )
+  }
 
   render(){
     return this.props.user ? (

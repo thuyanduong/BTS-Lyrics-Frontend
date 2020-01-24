@@ -18,7 +18,7 @@ class FlashCardForm extends React.Component {
   render(){
     let {korean, english, notes, categories} = this.props.card
     return (
-      <Modal size="large" open={true}>
+      <Modal size="large" open={true} onClose={()=>this.props.history.push("/")}>
         <Modal.Content>
           <Modal.Description>
             <form className="ui form">
@@ -43,16 +43,17 @@ class FlashCardForm extends React.Component {
                   options={this.dropDownCategories()}
                   onChange={this.props.updateCategories}
                 />
+                <div style={{marginTop: "1em"}}>
+                  <div className="ui primary basic button" onClick={()=>this.props.onSave(this.state.editing)}>
+                    Save
+                  </div>
+                  <div className="ui button" onClick={()=>this.props.onCancel(this.state.editing)}>
+                    Cancel
+                  </div>
+                </div>
               </div>
             </form>
-            <div style={{marginTop: "1em"}}>
-              <div className="ui primary basic button" onClick={()=>this.props.onSave(this.state.editing)}>
-                Save
-              </div>
-              <div className="ui button" onClick={()=>this.props.onCancel(this.state.editing)}>
-                Cancel
-              </div>
-            </div>
+
           </Modal.Description>
         </Modal.Content>
       </Modal>

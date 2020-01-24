@@ -15,7 +15,38 @@ const initialState = {
   categories: [],
   activeCategory: null,
   allFlashCards: [],
-  recentFlashCards: []
+  recentFlashCards: [],
+
+  flashCardFront: "Korean",
+  sortCategories: "",
+  sortFlashCards: ""
+}
+
+function sortCategoriesReducer(state=initialState.sortCategories, action){
+  switch (action.type) {
+    case ACTIONTYPE.SORT_CATEGORIES:
+      return action.sortBy
+    default:
+      return state
+  }
+}
+
+function sortFlashCardsReducer(state=initialState.sortFlashCards, action){
+  switch (action.type) {
+    case ACTIONTYPE.SORT_FLASH_CARDS:
+      return action.sortBy
+    default:
+      return state
+  }
+}
+
+function flashCardFrontReducer(state = initialState.flashCardFront, action){
+  switch (action.type) {
+    case ACTIONTYPE.TOGGLE_LANGUAGE:
+      return state === "Korean" ? "English" : "Korean"
+    default:
+      return state
+  }
 }
 
 function allFlashCardsReducer(state = initialState.allFlashCards, action){
@@ -55,6 +86,7 @@ function activeCategoryReducer(state = initialState.activeCategory, action){
         newState.flashCards = shuffle(action.category.flashCards)
         return newState
       }
+      return state
     case ACTIONTYPE.DELETE_CARD:
       if(state){
         let i = state.flashCards.findIndex(flashCard => flashCard.id === action.flashCard.id)
@@ -249,5 +281,8 @@ export default combineReducers({
   allFlashCards: allFlashCardsReducer,
   recentFlashCards: recentFlashCardsReducer,
   loadingCurrentUser: loadingCurrentUserReducer,
-  activeCategory: activeCategoryReducer
+  activeCategory: activeCategoryReducer,
+  flashCardFront: flashCardFrontReducer,
+  sortCategories: sortCategoriesReducer,
+  sortFlashCards: sortFlashCardsReducer
 })

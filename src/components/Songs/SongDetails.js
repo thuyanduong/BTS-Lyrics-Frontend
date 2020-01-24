@@ -4,10 +4,10 @@ import NotFound from '../NotFound'
 import URL from '../../_helpers/url'
 import {ScaleLoader} from 'react-spinners'
 import {HashLink as Link} from 'react-router-hash-link';
-import removeWhiteSpace from '../../_helpers/removeWhiteSpace'
 import {connect} from 'react-redux'
 import LyricsFormatOptions from './LyricsFormatOptions'
 import queryString from 'query-string'
+import Line from './Line'
 
 class SongDetails extends React.PureComponent{
   constructor(){
@@ -61,33 +61,14 @@ class SongDetails extends React.PureComponent{
   }
 
   renderRow = (index, lyricsArray, transArray) => {
-    if(this.state.queryType === 'line'){
-      var searchTerm = removeWhiteSpace(this.state.searchTerm)
-      var lyrics = removeWhiteSpace(lyricsArray[index])
-      var trans = removeWhiteSpace(transArray[index])
-      var match = (searchTerm === lyrics || searchTerm === trans) ? true : false
-    }
-    return (
-      <React.Fragment>
-        <span className={`eight wide column lyrics lyrics-row ${match? "line" : ""}`}
-          dangerouslySetInnerHTML={{__html: this.renderHighLightedSpan('lyrics', lyricsArray[index])}}>
-        </span>
-        <span className={`eight wide column translation lyrics-row ${match? "line" : ""}`}
-            dangerouslySetInnerHTML={{__html: this.renderHighLightedSpan('translation', transArray[index])}}>
-        </span>
-      </React.Fragment>
-    )
-  }
-
-  renderHighLightedSpan = (type, line) => {
-    if(!line){
-      return '<span>&nbsp;</span>'
-    }else if(type === this.state.queryType){
-      let reg = `(${removeWhiteSpace(this.state.searchTerm).split('').join('\\s*')})`
-      let regExp = new RegExp(reg, 'gi');
-      return line.replace(regExp, '<span class="highlight">$1</span>');
-    }
-    return line
+    return <Line
+      index={index}
+      lyricsArray={lyricsArray}
+      transArray={transArray}
+      queryType={this.state.queryType}
+      title={this.state.title}
+      searchTerm={this.state.searchTerm}
+    />
   }
 
   renderMediaIcons = () => {

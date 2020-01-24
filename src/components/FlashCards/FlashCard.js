@@ -50,7 +50,7 @@ class FlashCard extends React.Component {
             ></i>
           </div> :
           null}
-          {card.korean}
+          {this.props.language === "Korean" ? card.korean : card.english}
         </div>
         <div className="ui flash-card" style={style}
           onMouseEnter={()=>this.setState({showExpandBack: true})}
@@ -63,7 +63,7 @@ class FlashCard extends React.Component {
             ></i>
           </div> :
           null}
-          {card.english}
+          {this.props.language === "Korean" ? card.english : card.korean}
         </div>
       </ReactCardFlip>
     )
@@ -71,7 +71,8 @@ class FlashCard extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  activeCategory: state.activeCategory
+  activeCategory: state.activeCategory,
+  language: state.flashCardFront
 })
 
 export default withRouter(connect(mapStateToProps)(FlashCard))
