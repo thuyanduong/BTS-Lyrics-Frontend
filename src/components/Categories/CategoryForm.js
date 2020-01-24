@@ -68,17 +68,21 @@ class CategoryForm extends React.Component {
                 <div style={{display:"inline-block", marginLeft:"1em"}}>
                   <ChromePicker onChange={this.handleChange} color={this.state.color} disableAlpha={true}/>
                 </div>
-                <div style={{display:"inline-block", marginLeft:"1em", width: "100%"}}>
+                <div style={{display:"inline-block", marginLeft:"1em", width: "100%", position:"relative"}}>
                   <div className={`field ${this.state.error}`}>
                     <input className="name-input" type="text" placeholder="Name" name="name" style={{marginBottom: "1em"}}
                     onChange={(e)=>{this.setState({categoryName: e.target.value})}} value={this.state.categoryName}/>
                   </div>
-                  <button onClick={this.submit} className="ui primary basic button">
-                    Save
-                  </button>
-                  <button onClick={this.redirect} className="ui button">
-                    Cancel
-                  </button>
+                  <div className="field" style={{position:"absolute", bottom: 0, right: 0, textAlign:"right"}}>
+                    <div>
+                      <button onClick={this.submit} className="ui primary basic button">
+                        Save
+                      </button>
+                      <button onClick={this.redirect} className="ui button">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

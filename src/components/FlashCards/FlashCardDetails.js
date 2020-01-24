@@ -27,31 +27,43 @@ class FlashCardDetails extends React.Component {
   }
 
   render(){
-    let {korean, english, notes, id} = this.props.card
+    let {language, card: {korean, english, notes, id}} = this.props
     return (
       <Modal size="large" open={true} onClose={()=>this.props.history.push('/')}>
         <Modal.Content>
           <Modal.Description>
             {this.props.card ?
-              <div>
-                <p>Korean: {korean}</p>
-                <p>English: {english}</p>
-                <div>
+              <div className="ui form">
+                <div className="field" style={{margin:"auto", display: "block", textAlign: "center"}}>
+                  <div style={{margin: "0em 2em", display:"inline-block"}}>
+                    <p style={{fontWeight: "700"}}>{language === "Korean" ? "Korean:" : "English:"}</p>
+                    <div className="ui flash-card-modal">
+                      {language === "Korean" ? korean : english}
+                    </div>
+                  </div>
+                  <div style={{margin: "0em 2em", display:"inline-block"}}>
+                    <p style={{fontWeight: "700"}}>{language === "Korean" ? "English:" : "Korean:"}</p>
+                    <div className="ui flash-card-modal">
+                      {language === "Korean" ? english : korean}
+                    </div>
+                  </div>
+                </div>
+                <div className="field" style={{marginTop: "2em"}}>
                   <label>Notes:</label>
-                  <div className="" style={{border: "solid grey"}}>
+                  <div className="ui segment" style={{overflow: 'auto', maxHeight: 200 }}>
                     <ReactMarkdown
                       source={notes}
                       escapeHtml={false}
                     />
                   </div>
                 </div>
-                <p><b>Categories:</b></p>
-                <div>
+                <div className="field">
+                  <label>Categories:</label>
                   {this.props.card.categories.map(category => (
                     <div key={category.id} className="ui label" style={{backgroundColor: category.color, color: textColor(category.color)}}>{category.name}</div>
                   ))}
                 </div>
-                <div style={{marginTop: "1em"}}>
+                <div className="field" style={{textAlign:"right"}}>
                   <button onClick={()=>this.redirect(`/flash-cards/edit/${id}`)} className="ui primary basic button">
                     Edit
                   </button>
@@ -72,4 +84,8 @@ class FlashCardDetails extends React.Component {
   }
 }
 
-export default withRouter(connect(null, {submit})(FlashCardDetails))
+const mapStateToProps = state => ({
+  language: state.flashCardFront
+})
+
+export default withRouter(connect(mapStateToProps, {submit})(FlashCardDetails))

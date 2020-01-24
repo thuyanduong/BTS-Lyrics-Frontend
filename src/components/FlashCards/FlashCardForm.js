@@ -22,33 +22,45 @@ class FlashCardForm extends React.Component {
         <Modal.Content>
           <Modal.Description>
             <form className="ui form">
-              <div className="field">
-                <label>Korean</label>
-                <input type="text" name="korean" value={korean} onChange={this.props.onChange}/>
+              <div className="field" style={{margin:"auto", display: "block", textAlign: "center"}}>
+                <div style={{margin: "0em 2em", display:"inline-block"}}>
+                  <p style={{fontWeight:700}}>Korean:</p>
+                  <input type="text" name="korean" value={korean} onChange={this.props.onChange}
+                    style={{width:"290px", height:"175px", textAlign:"center", fontSize:"2em"}}
+                  />
+                </div>
+                <div style={{margin: "0em 2em", display:"inline-block"}}>
+                  <p style={{fontWeight:700}}>English:</p>
+                  <input type="text" name="english" value={english} onChange={this.props.onChange}
+                    style={{width:"290px", height:"175px", textAlign:"center", fontSize:"2em"}}
+                  />
+                </div>
               </div>
               <div className="field">
-                <label>English</label>
-                <input type="text" name="english" value={english} onChange={this.props.onChange}/>
-              </div>
-              <div className="field">
-                <label>Notes</label>
+                <label>Notes:</label>
                 <textarea name="notes" value={notes} onChange={this.props.onChange}></textarea>
               </div>
-              <div className="field">
-                <label>Categories</label>
-                <Dropdown
-                  placeholder='Categories'
-                  fluid multiple selection search
-                  value={categories.map(category => category.id)}
-                  options={this.dropDownCategories()}
-                  onChange={this.props.updateCategories}
-                />
-                <div style={{marginTop: "1em"}}>
-                  <div className="ui primary basic button" onClick={()=>this.props.onSave(this.state.editing)}>
-                    Save
+              <div className="field" style={{display:"table", width:"100%"}}>
+                <label style={{marginBottom:"0.5em"}}>Categories:</label>
+                <div style={{display: "table-row"}}>
+                  <div className="" style={{display: "table-cell"}}>
+                    <Dropdown
+                      placeholder='Categories'
+                      fluid multiple selection search
+                      value={categories.map(category => category.id)}
+                      options={this.dropDownCategories()}
+                      onChange={this.props.updateCategories}
+                    />
                   </div>
-                  <div className="ui button" onClick={()=>this.props.onCancel(this.state.editing)}>
-                    Cancel
+                  <div style={{display: "table-cell", width: "1em"}}>
+                  </div>
+                  <div style={{display: "table-cell", width: "165px", verticalAlign:"middle"}}>
+                    <div className="ui primary basic button" onClick={()=>this.props.onSave(this.state.editing)}>
+                      Save
+                    </div>
+                    <div className="ui button" onClick={()=>this.props.onCancel(this.state.editing)}>
+                      Cancel
+                    </div>
                   </div>
                 </div>
               </div>

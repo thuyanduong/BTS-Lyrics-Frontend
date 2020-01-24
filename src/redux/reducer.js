@@ -26,6 +26,8 @@ function sortCategoriesReducer(state=initialState.sortCategories, action){
   switch (action.type) {
     case ACTIONTYPE.SORT_CATEGORIES:
       return action.sortBy
+    case ACTIONTYPE.RESET_FILTER:
+      return ""
     default:
       return state
   }
@@ -35,6 +37,8 @@ function sortFlashCardsReducer(state=initialState.sortFlashCards, action){
   switch (action.type) {
     case ACTIONTYPE.SORT_FLASH_CARDS:
       return action.sortBy
+    case ACTIONTYPE.RESET_FILTER:
+      return ""
     default:
       return state
   }
@@ -75,6 +79,8 @@ function recentFlashCardsReducer(state = initialState.recentFlashCards, action){
 
 function activeCategoryReducer(state = initialState.activeCategory, action){
   switch (action.type) {
+    case ACTIONTYPE.RESET_FILTER:
+      return null
     case ACTIONTYPE.SET_ACTIVE_CATEGORY:
       action.category.flashCards = shuffle(action.flashCards)
       return action.category

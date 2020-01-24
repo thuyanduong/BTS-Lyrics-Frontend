@@ -9,7 +9,7 @@ import FlashCardFilter from './FlashCardFilter'
 import CategoryForm from '../Categories/CategoryForm'
 import FlashCardModal from './FlashCardModal'
 import {Button} from 'semantic-ui-react'
-import {fetchingFlashCards} from '../../redux/actionCreators'
+import {fetchingFlashCards, resetFilter} from '../../redux/actionCreators'
 
 class FlashCardsContainer extends React.Component {
   constructor(props){
@@ -30,22 +30,13 @@ class FlashCardsContainer extends React.Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
-  // changeFilter = (event) => {
-  //   this.setState({
-  //     filters: {
-  //       ...this.state.filters,
-  //       [event.target.name]: event.target.value
-  //     }
-  //   })
-  // }
-
-  // isFiltered = () => {
-  //   let {filters: {sortBy, ascending, searchTerm}} = this.state
-  //   if(sortBy === "Created At" && ascending === true && searchTerm === ""){
-  //     return false
-  //   }
-  //   return true
-  // }
+  resetFilter = () => {
+    this.setState({
+      flashCardSearchText: "",
+      categorySearchText: ""
+    })
+    this.props.resetFilter()
+  }
 
   filteredCards = () => {
     let filteredCards = this.flashCards()
@@ -91,6 +82,7 @@ class FlashCardsContainer extends React.Component {
             flashCardSearchText={this.state.flashCardSearchText}
             onChange={this.onChange}
             count={cards.length}
+            resetFilter={this.resetFilter}
           />
         </div>
         <div className="ui four wide column" style={{padding: "0em"}}>
@@ -149,4 +141,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, {fetchingFlashCards})(FlashCardsContainer))
+export default withRouter(connect(mapStateToProps, {fetchingFlashCards, resetFilter})(FlashCardsContainer))

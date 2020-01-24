@@ -121,7 +121,9 @@ class FlashCardFilter extends React.Component {
           {this.renderCatergoryLabel()}
           {this.renderCountLabel()}
           <div style={{float:'right'}}>
-            <a style={{marginRight: "1em"}}>Reset Filters</a>
+            <span className="blue link" style={{marginRight: "1em"}}
+              onClick={this.props.resetFilter}
+            >Reset Filters</span>
             {this.renderToggle()}
             <div className="ui button" onClick={(e) => this.redirect(e, `/flash-cards/new`)}>
               <i className="plus icon"></i>
