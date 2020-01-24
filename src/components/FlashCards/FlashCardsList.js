@@ -19,14 +19,15 @@ class FlashCardsList extends React.Component {
   }
 
   sortedFlashCards = () => {
-    return [...this.props.flashCards].sort(this.sortFunction())
+    return this.props.flashCards.sort(this.sortFunction())
   }
 
   render(){
+    let cards = this.sortedFlashCards()
     return (
       <div className="ui segment vertical">
         <div className="ui cards">
-          {this.sortedFlashCards().map(card => <FlashCard
+          {cards.map(card => <FlashCard
             key={card.id}
             card={card}
           />)}

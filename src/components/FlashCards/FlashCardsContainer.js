@@ -99,7 +99,7 @@ class FlashCardsContainer extends React.Component {
         <div className="ui twelve wide column" style={{padding: "0em"}}>
           <div className="ui cards">
             <FlashCardsList
-              flashCards={cards}
+              flashCards={[...cards]}
             />
           </div>
         </div>
