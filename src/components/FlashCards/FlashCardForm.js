@@ -15,6 +15,28 @@ class FlashCardForm extends React.Component {
     return this.props.categories.map(category => ({ key: category.id, text: category.name, value: category.id }))
   }
 
+  getKoreanSide = () => {
+    return (
+      <div style={{margin: "0em 2em", display:"inline-block"}}>
+        <p style={{fontWeight:700}}>Korean:</p>
+        <input type="text" name="korean" value={this.props.card.korean} onChange={this.props.onChange}
+          style={{width:"290px", height:"175px", textAlign:"center", fontSize:"2em"}}
+        />
+      </div>
+    )
+  }
+
+  getEnglishSide = () => {
+    return (
+      <div style={{margin: "0em 2em", display:"inline-block"}}>
+        <p style={{fontWeight:700}}>English:</p>
+        <input type="text" name="english" value={this.props.card.english} onChange={this.props.onChange}
+          style={{width:"290px", height:"175px", textAlign:"center", fontSize:"2em"}}
+        />
+      </div>
+    )
+  }
+
   render(){
     let {korean, english, notes, categories} = this.props.card
     return (
@@ -23,18 +45,8 @@ class FlashCardForm extends React.Component {
           <Modal.Description>
             <form className="ui form">
               <div className="field" style={{margin:"auto", display: "block", textAlign: "center"}}>
-                <div style={{margin: "0em 2em", display:"inline-block"}}>
-                  <p style={{fontWeight:700}}>Korean:</p>
-                  <input type="text" name="korean" value={korean} onChange={this.props.onChange}
-                    style={{width:"290px", height:"175px", textAlign:"center", fontSize:"2em"}}
-                  />
-                </div>
-                <div style={{margin: "0em 2em", display:"inline-block"}}>
-                  <p style={{fontWeight:700}}>English:</p>
-                  <input type="text" name="english" value={english} onChange={this.props.onChange}
-                    style={{width:"290px", height:"175px", textAlign:"center", fontSize:"2em"}}
-                  />
-                </div>
+                {this.props.language === "Korean" ? this.getKoreanSide() : this.getEnglishSide()}
+                {this.props.language === "English" ? this.getKoreanSide() : this.getEnglishSide()}
               </div>
               <div className="field">
                 <label>Notes:</label>
@@ -74,7 +86,8 @@ class FlashCardForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  categories: state.categories
+  categories: state.categories,
+  language: state.flashCardFront
 })
 
 export default withRouter(connect(mapStateToProps)(FlashCardForm))
