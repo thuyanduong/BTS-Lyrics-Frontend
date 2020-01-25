@@ -6,7 +6,7 @@ const fetchingUser = () => {
   return (dispatch) => {
     let token = localStorage.getItem('token')
     if(token){
-      fetch('http://localhost:3000/user', {
+      fetch(`${URL}/user`, {
         headers: {"Authentication": `Bearer ${token}`}
       })
       .then(res => res.json())
@@ -90,7 +90,7 @@ const submit = (resource, info, options) => {
 
 const logIn = (username, password) => {
   return (dispatch) => {
-    fetch('http://localhost:3000/login', {
+    fetch(`${URL}/login`, {
     	method: "POST",
     	headers: {
     		"Content-Type" : "application/json",
