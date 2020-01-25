@@ -1,1 +1,1 @@
-export default 'https://bts-backend.herokuapp.com'
+export default 'http://bts-lyrics-backend.herokuapp.com'

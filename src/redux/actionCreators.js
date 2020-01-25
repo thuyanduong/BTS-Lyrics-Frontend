@@ -122,7 +122,6 @@ const fetchActiveCategory = (categoryId) => {
         dispatch(setActiveCategory(category, data.flash_cards))
       })
     }else{
-      //just shuffle the flashCards in the activeCategory
       dispatch(shuffleCategory(category))
     }
   }
