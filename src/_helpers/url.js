@@ -1,1 +1,1 @@
-export default 'http://bts-lyrics-backend.herokuapp.com'
+export default process.env.REACT_APP_API_ENDPOINT

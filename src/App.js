@@ -22,6 +22,7 @@ class App extends PureComponent {
     return (
       <div className="App">
         <Navbar/>
+        <h1>{process.env.API_URL}</h1>
         {
           !this.props.loading ? <Switch>
             {

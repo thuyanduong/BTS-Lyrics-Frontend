@@ -38,7 +38,7 @@ class FlashCardForm extends React.Component {
   }
 
   render(){
-    let {korean, english, notes, categories} = this.props.card
+    let {notes, categories} = this.props.card
     return (
       <Modal size="large" open={true} onClose={()=>this.props.history.push("/")}>
         <Modal.Content>
