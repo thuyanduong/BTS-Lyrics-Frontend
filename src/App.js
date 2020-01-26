@@ -19,10 +19,10 @@ class App extends PureComponent {
   }
 
   render() {
+    console.log(process.env)
     return (
       <div className="App">
         <Navbar/>
-        <h1>{process.env.API_URL}</h1>
         {
           !this.props.loading ? <Switch>
             {
