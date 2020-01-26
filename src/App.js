@@ -19,7 +19,6 @@ class App extends PureComponent {
   }
 
   render() {
-    console.log(process.env)
     return (
       <div className="App">
         <Navbar/>
