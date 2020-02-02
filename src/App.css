@@ -59,6 +59,7 @@ div.new-flash-card-editor {
   left: 50%;
   transform: translate(-50%,-50%);
   line-height: 1.15em;
+  width: 100%;
 }
 
 .ui.flash-card-modal {
@@ -98,6 +99,7 @@ div.new-flash-card-editor {
   left: 50%;
   transform: translate(-50%,-50%);
   line-height: 1.15em;
+  width: 100%;
 }
 
 .ui.cards > .flash-card, .ui.flash-card {
