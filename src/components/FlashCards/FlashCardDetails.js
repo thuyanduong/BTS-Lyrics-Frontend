@@ -38,13 +38,17 @@ class FlashCardDetails extends React.Component {
                   <div style={{margin: "0em 2em", display:"inline-block"}}>
                     <p style={{fontWeight: "700"}}>{language === "Korean" ? "Korean:" : "English:"}</p>
                     <div className="ui flash-card-modal">
-                      {language === "Korean" ? korean : english}
+                      <span>
+                        {language === "Korean" ? korean : english}
+                      </span>
                     </div>
                   </div>
                   <div style={{margin: "0em 2em", display:"inline-block"}}>
                     <p style={{fontWeight: "700"}}>{language === "Korean" ? "English:" : "Korean:"}</p>
                     <div className="ui flash-card-modal">
-                      {language === "Korean" ? english : korean}
+                      <span>
+                        {language === "Korean" ? english : korean}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -64,14 +68,14 @@ class FlashCardDetails extends React.Component {
                   ))}
                 </div>
                 <div className="field" style={{textAlign:"right"}}>
-                  <button onClick={()=>this.redirect(`/flash-cards/edit/${id}`)} className="ui primary basic button">
-                    Edit
-                  </button>
                   <button onClick={this.deleteCard} className="ui negative basic button">
                     Delete
                   </button>
                   <button onClick={()=>this.redirect('/')} className="ui button">
                     Close
+                  </button>
+                  <button onClick={()=>this.redirect(`/flash-cards/edit/${id}`)} className="ui primary button">
+                    Edit
                   </button>
                 </div>
               </div> :

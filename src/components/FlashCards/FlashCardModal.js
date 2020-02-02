@@ -38,13 +38,6 @@ class FlashCardModal extends React.Component{
           [e.target.name]: e.target.value
         }
       })
-    }else{
-      // this.setState({
-      //   card : {
-      //     ...this.state.card,
-      //     notes: e.target.getContent()
-      //   }
-      // })
     }
   }
 

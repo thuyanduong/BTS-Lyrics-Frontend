@@ -50,7 +50,9 @@ class FlashCard extends React.Component {
             ></i>
           </div> :
           null}
-          {this.props.language === "Korean" ? card.korean : card.english}
+          <span>
+            {this.props.language === "Korean" ? card.korean : card.english}
+          </span>
         </div>
         <div className="ui flash-card" style={style}
           onMouseEnter={()=>this.setState({showExpandBack: true})}
@@ -63,7 +65,9 @@ class FlashCard extends React.Component {
             ></i>
           </div> :
           null}
-          {this.props.language === "Korean" ? card.english : card.korean}
+          <span>
+            {this.props.language === "Korean" ? card.english : card.korean}
+          </span>
         </div>
       </ReactCardFlip>
     )

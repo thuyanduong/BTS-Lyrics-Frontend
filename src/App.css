@@ -53,6 +53,13 @@ div.new-flash-card-editor {
 /*  END Flash Card Page styling  */
 
 /*  START Flash Card styling  */
+.ui.flash-card-modal > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  line-height: 1.15em;
+}
 
 .ui.flash-card-modal {
   max-width: 100%;
@@ -67,8 +74,7 @@ div.new-flash-card-editor {
   -ms-flex-direction: column;
   flex-direction: column;
   width: 290px;
-  min-height: 175px!important;
-  line-height: 175px;
+  min-height: 175px;
   background: #FFFFFF;
   padding: 0em;
   border: solid;
@@ -86,8 +92,17 @@ div.new-flash-card-editor {
   z-index: '';
 }
 
+.ui.cards > .flash-card, .ui.flash-card > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  line-height: 1.15em;
+}
+
 .ui.cards > .flash-card, .ui.flash-card {
   max-width: 100%;
+  position: relative;
   text-align: center!important;
   position: relative;
   display: -webkit-box;
@@ -99,8 +114,7 @@ div.new-flash-card-editor {
   -ms-flex-direction: column;
   flex-direction: column;
   width: 290px;
-  min-height: 175px!important;
-  line-height: 175px;
+  min-height: 175px;
   background: #FFFFFF;
   padding: 0em;
   border: solid;

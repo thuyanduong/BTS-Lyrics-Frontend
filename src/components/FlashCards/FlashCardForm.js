@@ -67,11 +67,11 @@ class FlashCardForm extends React.Component {
                   <div style={{display: "table-cell", width: "1em"}}>
                   </div>
                   <div style={{display: "table-cell", width: "165px", verticalAlign:"middle"}}>
-                    <div className="ui primary basic button" onClick={()=>this.props.onSave(this.state.editing)}>
-                      Save
-                    </div>
                     <div className="ui button" onClick={()=>this.props.onCancel(this.state.editing)}>
                       Cancel
+                    </div>
+                    <div className="ui primary button" onClick={()=>this.props.onSave(this.state.editing)}>
+                      Save
                     </div>
                   </div>
                 </div>

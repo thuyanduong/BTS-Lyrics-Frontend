@@ -75,11 +75,11 @@ class CategoryForm extends React.Component {
                   </div>
                   <div className="field" style={{position:"absolute", bottom: 0, right: 0, textAlign:"right"}}>
                     <div>
-                      <button onClick={this.submit} className="ui primary basic button">
-                        Save
-                      </button>
                       <button onClick={this.redirect} className="ui button">
                         Cancel
+                      </button>
+                      <button onClick={this.submit} className="ui primary button">
+                        Save
                       </button>
                     </div>
                   </div>
