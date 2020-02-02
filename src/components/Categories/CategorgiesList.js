@@ -12,7 +12,7 @@ class CategoriesList extends React.Component {
       case "Recently Updated":
         return (a, b) => b.updated_at.localeCompare(a.updated_at)
       case "Alphabetical":
-        return (a, b) => a.name.localeCompare(b.name)
+        return (a, b) => a.name > b.name
       default:
         return (a, b) => 0
     }
