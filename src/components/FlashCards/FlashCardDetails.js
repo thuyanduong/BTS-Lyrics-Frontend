@@ -4,6 +4,7 @@ import {Modal} from 'semantic-ui-react'
 import textColor from '../../_helpers/textColor'
 import {submit} from '../../redux/actionCreators'
 import {connect} from 'react-redux'
+import Speech from 'react-speech'
 const ReactMarkdown = require('react-markdown/with-html')
 
 class FlashCardDetails extends React.Component {
@@ -52,7 +53,16 @@ class FlashCardDetails extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="field" style={{marginTop: "2em"}}>
+                <p style={{textAlign:"center"}}>
+                  <Speech
+                    lang="ko-KR"
+                    voice="Yuna"
+                    text={this.props.card.korean}
+                    textAsButton
+                    displayText="Play Pronounciation"
+                  />
+                </p>
+                <div className="field" style={{marginTop: "1em"}}>
                   <label>Notes:</label>
                   <div className="ui segment" style={{overflow: 'auto', maxHeight: 200 }}>
                     <ReactMarkdown
