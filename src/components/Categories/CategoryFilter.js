@@ -1,31 +1,35 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Search, Icon } from 'semantic-ui-react'
 import {sortCategories} from '../../redux/actionCreators'
 
 const CategoryFilter = (props) => {
+  let {onChange, categorySearchText, sortCategories, sortBy} = props
     return (
       <div className="ui form segment profile">
         <div className="field">
-          <div className="ui icon field input">
-            <input
-              className="prompt"
-              type="text"
-              name="categorySearchText"
-              placeholder="Search Categories"
-              onChange={props.onChange}
-              value={props.categorySearchText}
-            />
-            <i className="search icon"></i>
-          </div>
+          <Search
+            fluid
+            type="text"
+            name="categorySearchText"
+            placeholder="Search Categories"
+            value={categorySearchText}
+            onSearchChange={(e)=>onChange(e.target.name, e.target.value)}
+            showNoResults={false}
+            icon={
+              categorySearchText === "" ?
+              <Icon name='search'/> :
+              <Icon name='delete' link onClick={(e)=>onChange("categorySearchText", "")}/>
+            }
+          />
         </div>
         <div className="field">
           <Dropdown
             clearable
             placeholder='Sort Categories'
             selection
-            onChange={(e, data) => props.sortCategories(data.value)}
-            value={props.sortBy}
+            onChange={(e, data) => sortCategories(data.value)}
+            value={sortBy}
             options={[
                 {
                   key: 'Newest',

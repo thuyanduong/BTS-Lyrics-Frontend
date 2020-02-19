@@ -3,7 +3,7 @@ import textColor from '../../_helpers/textColor'
 import {withRouter} from 'react-router-dom'
 import {resetActiveCategory, toggleLanguage, sortFlashCards} from '../../redux/actionCreators'
 import {connect} from 'react-redux'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Search, Icon} from 'semantic-ui-react'
 
 class FlashCardFilter extends React.Component {
   redirect = (e, url) => {
@@ -40,28 +40,34 @@ class FlashCardFilter extends React.Component {
   }
 
   renderSearchbar = () => {
+    let {flashCardSearchText, onChange, sortBy, sortFlashCards} = this.props
     return (
       <div className="ui form">
         <div className="field">
           <div className="two fields">
-            <div className="ui icon field input">
-              <input
-                className="prompt"
+            <div className="field">
+              <Search
+                fluid
                 type="text"
                 name="flashCardSearchText"
                 placeholder="Search Flashcards"
-                value={this.props.flashCardSearchText}
-                onChange={this.props.onChange}
+                value={flashCardSearchText}
+                onSearchChange={(e)=>onChange(e.target.name, e.target.value)}
+                showNoResults={false}
+                icon={
+                  flashCardSearchText === "" ?
+                  <Icon name='search'/> :
+                  <Icon name='delete' link onClick={(e)=>onChange("flashCardSearchText", "")}/>
+                }
               />
-              <i className="search icon"></i>
             </div>
             <div className="field">
               <Dropdown
                 clearable
                 placeholder='Sort Flashcards'
                 selection
-                onChange={(e, data) => this.props.sortFlashCards(data.value)}
-                value={this.props.sortBy}
+                onChange={(e, data) => sortFlashCards(data.value)}
+                value={sortBy}
                 options={[
                     {
                       key: 'Most Recent',

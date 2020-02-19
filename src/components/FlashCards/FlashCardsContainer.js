@@ -26,8 +26,8 @@ class FlashCardsContainer extends React.Component {
     }
   }
 
-  onChange = (event) => {
-    this.setState({[event.target.name]: event.target.value})
+  onChange = (name, val) => {
+    this.setState({[name]: val})
   }
 
   resetFilter = () => {
