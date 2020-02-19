@@ -1,7 +1,7 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {Modal, Dropdown} from 'semantic-ui-react'
+import {Modal, Dropdown, Form} from 'semantic-ui-react'
 
 class FlashCardForm extends React.Component {
   constructor(props){
@@ -42,43 +42,42 @@ class FlashCardForm extends React.Component {
     return (
       <Modal size="large" open={true} onClose={()=>this.props.history.push("/")}>
         <Modal.Content>
-          <Modal.Description>
-            <form className="ui form">
-              <div className="field" style={{margin:"auto", display: "block", textAlign: "center"}}>
-                {this.props.language === "Korean" ? this.getKoreanSide() : this.getEnglishSide()}
-                {this.props.language === "English" ? this.getKoreanSide() : this.getEnglishSide()}
-              </div>
-              <div className="field">
-                <label>Notes:</label>
-                <textarea name="notes" value={notes} onChange={this.props.onChange}></textarea>
-              </div>
-              <div className="field" style={{display:"table", width:"100%"}}>
-                <label style={{marginBottom:"0.5em"}}>Categories:</label>
-                <div style={{display: "table-row"}}>
-                  <div className="" style={{display: "table-cell"}}>
-                    <Dropdown
-                      placeholder='Categories'
-                      fluid multiple selection search
-                      value={categories.map(category => category.id)}
-                      options={this.dropDownCategories()}
-                      onChange={this.props.updateCategories}
-                    />
-                  </div>
-                  <div style={{display: "table-cell", width: "1em"}}>
-                  </div>
-                  <div style={{display: "table-cell", width: "165px", verticalAlign:"middle"}}>
-                    <div className="ui button" onClick={()=>this.props.onCancel(this.state.editing)}>
-                      Cancel
+            <Modal.Description>
+              <Form className="ui form" onSubmit={(e)=>this.props.onSave(e, this.state.editing)}>
+                <div className="field" style={{margin:"auto", display: "block", textAlign: "center"}}>
+                  {this.props.language === "Korean" ? this.getKoreanSide() : this.getEnglishSide()}
+                  {this.props.language === "English" ? this.getKoreanSide() : this.getEnglishSide()}
+                </div>
+                <div className="field">
+                  <label>Notes:</label>
+                  <textarea name="notes" value={notes} onChange={this.props.onChange}></textarea>
+                </div>
+                <div className="field" style={{display:"table", width:"100%"}}>
+                  <label style={{marginBottom:"0.5em"}}>Categories:</label>
+                  <div style={{display: "table-row"}}>
+                    <div className="" style={{display: "table-cell"}}>
+                      <Dropdown
+                        placeholder='Categories'
+                        fluid multiple selection search
+                        value={categories.map(category => category.id)}
+                        options={this.dropDownCategories()}
+                        onChange={this.props.updateCategories}
+                      />
                     </div>
-                    <div className="ui primary button" onClick={()=>this.props.onSave(this.state.editing)}>
-                      Save
+                    <div style={{display: "table-cell", width: "1em"}}>
+                    </div>
+                    <div style={{display: "table-cell", width: "165px", verticalAlign:"middle"}}>
+                      <button type="submit" className="ui primary button">
+                        Save
+                      </button>
+                      <button type="button" className="ui button" onClick={()=>this.props.onCancel(this.state.editing)}>
+                        Cancel
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
-            </form>
-
-          </Modal.Description>
+              </Form>
+            </Modal.Description>
         </Modal.Content>
       </Modal>
     )

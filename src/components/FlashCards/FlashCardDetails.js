@@ -12,6 +12,24 @@ class FlashCardDetails extends React.Component {
     this.props.history.push(url)
   }
 
+  componentDidMount(){
+    document.addEventListener('keypress', this.pressedEnter)
+  }
+
+  componentWillUnmount(){
+    document.removeEventListener('keypress', this.pressedEnter)
+  }
+
+  pressedEnter = (e) => {
+    if(e.code === "Enter"){
+      this.close()
+    }
+  }
+
+  close = () => {
+    this.redirect('/')
+  }
+
   confirmDelete = () => {
     return window.confirm("Are you sure you want to delete this flash card?")
   }
@@ -30,7 +48,7 @@ class FlashCardDetails extends React.Component {
   render(){
     let {language, card: {korean, english, notes, id}} = this.props
     return (
-      <Modal size="large" open={true} onClose={()=>this.props.history.push('/')}>
+      <Modal size="large" open={true} onClose={this.close}>
         <Modal.Content>
           <Modal.Description>
             {this.props.card ?
@@ -78,14 +96,14 @@ class FlashCardDetails extends React.Component {
                   ))}
                 </div>
                 <div className="field" style={{textAlign:"right"}}>
+                  <button onClick={()=>this.redirect(`/flash-cards/edit/${id}`)} className="ui primary button">
+                    Edit
+                  </button>
                   <button onClick={this.deleteCard} className="ui negative basic button">
                     Delete
                   </button>
-                  <button onClick={()=>this.redirect('/')} className="ui button">
+                  <button onClick={this.close} className="ui button">
                     Close
-                  </button>
-                  <button onClick={()=>this.redirect(`/flash-cards/edit/${id}`)} className="ui primary button">
-                    Edit
                   </button>
                 </div>
               </div> :

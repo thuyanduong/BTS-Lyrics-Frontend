@@ -1,5 +1,5 @@
 import React from 'react'
-import {Header, Modal} from 'semantic-ui-react'
+import {Header, Modal, Form} from 'semantic-ui-react'
 import {ChromePicker} from 'react-color'
 import {connect} from 'react-redux'
 import {submit} from '../../redux/actionCreators'
@@ -36,6 +36,8 @@ class CategoryForm extends React.Component {
   }
 
   submit = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
     if(this.state.categoryName === ""){
       this.setState({error: "error"})
     }else{
@@ -59,6 +61,7 @@ class CategoryForm extends React.Component {
     return (
       <Modal size="small" open={true} onClose={()=>this.props.history.push('/')}>
         <Modal.Content>
+          <Form onSubmit={this.submit}>
           <Modal.Description>
             <Header>{this.props.edit ? "Edit" : "Add"} Category
             <i className="large circle icon" style={{color: this.state.color, float: "right", marginRight:"0"}}></i>
@@ -70,16 +73,16 @@ class CategoryForm extends React.Component {
                 </div>
                 <div style={{display:"inline-block", marginLeft:"1em", width: "100%", position:"relative"}}>
                   <div className={`field ${this.state.error}`}>
-                    <input className="name-input" type="text" placeholder="Name" name="name" style={{marginBottom: "1em"}}
+                    <Form.Input className="name-input" type="text" placeholder="Name" name="name" style={{marginBottom: "1em"}}
                     onChange={(e)=>{this.setState({categoryName: e.target.value})}} value={this.state.categoryName}/>
                   </div>
                   <div className="field" style={{position:"absolute", bottom: 0, right: 0, textAlign:"right"}}>
                     <div>
-                      <button onClick={this.redirect} className="ui button">
-                        Cancel
-                      </button>
-                      <button onClick={this.submit} className="ui primary button">
+                      <button type="submit" className="ui primary button">
                         Save
+                      </button>
+                      <button type="button" onClick={this.redirect} className="ui button">
+                        Cancel
                       </button>
                     </div>
                   </div>
@@ -87,6 +90,7 @@ class CategoryForm extends React.Component {
               </div>
             </div>
           </Modal.Description>
+          </Form>
         </Modal.Content>
       </Modal>
     )

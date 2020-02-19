@@ -50,7 +50,9 @@ class FlashCardModal extends React.Component{
     })
   }
 
-  onSave = (editing) => {
+  onSave = (e, editing) => {
+    e.preventDefault()
+    e.stopPropagation()
     if(this.state.card.categories.length > 0){
       let options
       if(editing){
