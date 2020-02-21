@@ -12,6 +12,7 @@ import Navbar from './components/Navbar'
 import LogInForm from './components/SignIn/LogInForm'
 import SignUpForm from './components/SignIn/SignUpForm'
 import FlashCardsContainer from './components/FlashCards/FlashCardsContainer'
+import MessageList from './components/MessageList'
 
 class App extends PureComponent {
   componentDidMount(){
@@ -20,8 +21,9 @@ class App extends PureComponent {
 
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{position: "relative"}}>
         <Navbar/>
+        <MessageList />
         {
           !this.props.loading ? <Switch>
             {

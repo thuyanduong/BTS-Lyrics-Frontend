@@ -19,7 +19,16 @@ const initialState = {
 
   flashCardFront: "Korean",
   sortCategories: "",
-  sortFlashCards: ""
+  sortFlashCards: "",
+
+  messageQueue: []
+}
+
+function messageQueueReducer(state=initialState.messageQueue, action){
+  switch (action.type) {
+    default:
+      return state
+  }
 }
 
 function sortCategoriesReducer(state=initialState.sortCategories, action){
@@ -290,5 +299,6 @@ export default combineReducers({
   activeCategory: activeCategoryReducer,
   flashCardFront: flashCardFrontReducer,
   sortCategories: sortCategoriesReducer,
-  sortFlashCards: sortFlashCardsReducer
+  sortFlashCards: sortFlashCardsReducer,
+  messageQueue: messageQueueReducer
 })
