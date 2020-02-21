@@ -1,6 +1,9 @@
 {
   "name": "bts-frontend",
   "version": "0.1.0",
+  "engines": {
+    "node": "13.7.0"
+  },
   "private": true,
   "dependencies": {
     "env-cmd": "^10.0.1",
