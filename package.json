@@ -26,8 +26,7 @@
     "react-spinners": "^0.5.3",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "semantic-ui-react": "^0.88.1",
-    "sweetalert2": "^9.7.2"
+    "semantic-ui-react": "^0.88.1"
   },
   "scripts": {
     "start": "react-scripts start",
