@@ -1,3 +1,26 @@
+/*  START MESSAGE Styling */
+.message-list{
+  position: absolute;
+  z-index: 2000;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+.ui.message {
+  width: 500px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: fade 3s;
+}
+
+@keyframes fade {
+  0%, 100% { opacity: 0 }
+  10%, 90% { opacity: 1 }
+}
+/* END MESSAGE Styling*/
+
 /*  START Song Details styling  */
 
 .highlight {

@@ -1,18 +1,18 @@
 import React, { PureComponent } from 'react';
 import './App.css';
+import {connect} from 'react-redux'
 import {withRouter, Switch, Route} from 'react-router-dom'
+import {fetchingUser} from './redux/actionCreators'
 import SearchForm from './components/Search/SearchForm'
 import NotFound from './components/NotFound'
 import SearchResultsPage from './components/SearchResults/SearchResultsPage'
 import SongContainer from './components/Songs/SongContainer'
 import AlbumsContainer from './components/Albums/AlbumsContainer'
-import {fetchingUser} from './redux/actionCreators'
-import {connect} from 'react-redux'
 import Navbar from './components/Navbar'
 import LogInForm from './components/SignIn/LogInForm'
 import SignUpForm from './components/SignIn/SignUpForm'
 import FlashCardsContainer from './components/FlashCards/FlashCardsContainer'
-import MessageList from './components/MessageList'
+import MessageList from './components/Messages/MessageList'
 
 class App extends PureComponent {
   componentDidMount(){
@@ -21,7 +21,7 @@ class App extends PureComponent {
 
   render() {
     return (
-      <div className="App" style={{position: "relative"}}>
+      <div className="App">
         <Navbar/>
         <MessageList />
         {

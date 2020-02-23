@@ -12,7 +12,8 @@ const fetchingUser = () => {
       .then(res => res.json())
       .then(data => {
         dispatch(fetchedUser(data.user_data, data.categories, data.recent_flash_cards))
-      }).catch(() => {
+      })
+      .catch(() => {
         dispatch(fetchedUser(null, [], []))
       })
     }else{
@@ -27,7 +28,8 @@ const fetchingData = () => {
     .then(res => res.json())
     .then(albums => {
       dispatch(fetchedData(albums))
-    }).catch(() => {
+    })
+    .catch(() => {
       dispatch(fetchedData([]))
     })
   }
@@ -39,7 +41,8 @@ const fetchingSongs = () => {
     .then(res => res.json())
     .then(songs => {
       dispatch(fetchedSongs(songs))
-    }).catch(() => {
+    })
+    .catch(() => {
       dispatch(fetchedSongs([]))
     })
   }
@@ -54,6 +57,9 @@ const fetchingFlashCards = () => {
       }).then(res => res.json())
       .then(flashCards => {
         dispatch(fetchedFlashCards(flashCards))
+      })
+      .catch(err => {
+        dispatch(addMessage(err.toString(), "error"))
       })
     }else{
       dispatch(fetchedFlashCards([]))
@@ -75,15 +81,15 @@ const submit = (resource, info, options) => {
     .then(res => res.json())
     .then(responseObj => {
       if(responseObj.error){
-        alert(responseObj.message)
+        dispatch(addMessage(responseObj.message, "error"))
       }else{
         dispatch(optionsObj.actionCreator(responseObj.resource))
-        window.alert(responseObj.message)
+        dispatch(addMessage(responseObj.message, "success"))
         options.callback()
       }
     })
     .catch(err => {
-      alert("ERROR! " + err)
+      dispatch(addMessage(err.toString(), "error"))
     })
   }
 }
@@ -100,14 +106,18 @@ const logIn = (username, password) => {
     		username,
     		password
     	})
-    }).then(res => res.json())
+    })
+    .then(res => res.json())
     .then(data => {
       if(data.success){
         localStorage.setItem("token", data.token)
         dispatch(fetchedUser(data.user_data, data.categories, data.recent_flash_cards))
       }else{
-        alert(data.message)
+        dispatch(addMessage(data.message, "error"))
       }
+    })
+    .catch(err => {
+      dispatch(addMessage(err.toString(), "error"))
     })
   }
 }
@@ -121,12 +131,25 @@ const fetchActiveCategory = (categoryId) => {
       .then(data => {
         dispatch(setActiveCategory(category, data.flash_cards))
       })
+      .catch(err => {
+        dispatch(addMessage(err.toString(), "error"))
+      })
     }else{
       dispatch(shuffleCategory(category))
     }
   }
 }
 
+const addMessage = (content, type) => {
+  return (dispatch) => {
+    let id = Date.now()
+    let message = {id, content, type}
+    dispatch({type: ACTIONTYPE.ADD_MESSAGE, message})
+    setTimeout(()=>{dispatch(removeMessage(id))}, 3000)
+  }
+}
+
+const removeMessage = (id) => ({type: ACTIONTYPE.REMOVE_MESSAGE, id})
 const createCard = (flashCard) => ({type: ACTIONTYPE.CREATE_CARD, flashCard})
 const updateCard = (flashCard) => ({type: ACTIONTYPE.UPDATE_CARD, flashCard})
 const deleteCard = (flashCard) => ({type: ACTIONTYPE.DELETE_CARD, flashCard})
@@ -159,4 +182,5 @@ export {fetchingData, submit, updateAlbum, createAlbum, fetchingFlashCards,
   createSong, deleteAlbum, updateSong, deleteSong, updateTracks, fetchingSongs,
   fetchingUser, logOut, logIn, createCategory, updateCategory, deleteCategory,
   createCard, deleteCard, updateCard, fetchActiveCategory, resetActiveCategory,
-  toggleLanguage, sortCategories, sortFlashCards, resetFilter}
+  toggleLanguage, sortCategories, sortFlashCards, resetFilter, addMessage,
+  removeMessage }

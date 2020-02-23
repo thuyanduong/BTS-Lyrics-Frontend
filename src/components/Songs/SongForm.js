@@ -38,6 +38,7 @@ class SongForm extends React.PureComponent{
           this.setState({notFound: true, loading: false})
         }
       })
+      .catch(err => this.props.addMessage(err.toString(), "error"))
     }else{
       this.setState({loading: false})
     }
@@ -49,7 +50,7 @@ class SongForm extends React.PureComponent{
 
   validateFields = () => {
     if(this.state.title.trim().length <= 0){
-      window.alert("Please enter a Song Title.")
+      this.props.addMessage("Please enter a Song Title.", "error")
       return false
     }
     return true

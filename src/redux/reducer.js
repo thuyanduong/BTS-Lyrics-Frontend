@@ -26,6 +26,10 @@ const initialState = {
 
 function messageQueueReducer(state=initialState.messageQueue, action){
   switch (action.type) {
+    case ACTIONTYPE.ADD_MESSAGE:
+      return [...state, action.message]
+    case ACTIONTYPE.REMOVE_MESSAGE:
+      return state.filter(message => message.id !== action.id)
     default:
       return state
   }

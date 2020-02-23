@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {submit} from '../../redux/actionCreators'
+import {submit, addMessage} from '../../redux/actionCreators'
 import {withRouter} from 'react-router-dom'
 import URL from '../../_helpers/url'
 import moment from 'moment'
@@ -40,6 +40,7 @@ class AlbumForm extends React.Component{
           this.setState({notFound: true, albumLoading: false})
         }
       })
+      .catch(err => this.props.addMessage(err.toString(), "error"))
     }else{
       this.setState({albumLoading: false})
     }
@@ -51,14 +52,15 @@ class AlbumForm extends React.Component{
     .then(albumTypes => {
       this.setState({albumTypes, albumTypesLoading: false})
     })
+    .catch(err => this.props.addMessage(err.toString(), "error"))
   }
 
   validateFields = () => {
     if(this.state.title.trim().length <= 0){ //check title
-      window.alert("Please enter an Album Title.")
+      this.props.addMessage("Please enter an Album Title.", "error")
       return false
     }else if(!moment(this.state.release_date, 'YYYY-MM-DD',true).isValid()){ //check release_date
-      window.alert("Please enter a valid Release Date.")
+      this.props.addMessage("Please enter a valid Release Date.", "error")
       return false
     }
     return true
@@ -165,4 +167,4 @@ const mapStateToProps = state => ({
   user: state.currentUser
 })
 
-export default withRouter(connect(mapStateToProps, {submit})(AlbumForm))
+export default withRouter(connect(mapStateToProps, {submit, addMessage})(AlbumForm))

@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import {ScaleLoader} from 'react-spinners'
 import { Dropdown } from 'semantic-ui-react'
 import NotFound from '../NotFound'
-import {submit, fetchingSongs} from '../../redux/actionCreators'
+import {submit, fetchingSongs, addMessage} from '../../redux/actionCreators'
 
 const newSong = {id: null, title:"" , slug:""}
 
@@ -40,6 +40,7 @@ class AlbumTracksForm extends React.Component {
           this.setState({notFound: true, albumLoading: false})
         }
       })
+      .catch(err => this.props.addMessage(err.toString(), "error"))
     }else{
       this.setState({albumLoading: false})
     }
@@ -86,7 +87,7 @@ class AlbumTracksForm extends React.Component {
   validateSongs = () => {
     for(let track of this.state.tracks){
       if(track.song.id === null || track.track_number === ""){
-        alert("Please enter valid track numbers and songs.")
+        this.props.addMessage("Please enter valid track numbers and songs.", "error")
         return false
       }
     }
@@ -173,4 +174,4 @@ const mapStateToProps = (state) => ({
   user: state.currentUser
 })
 
-export default withRouter(connect(mapStateToProps, {submit, fetchingSongs})(AlbumTracksForm))
+export default withRouter(connect(mapStateToProps, {submit, fetchingSongs, addMessage})(AlbumTracksForm))

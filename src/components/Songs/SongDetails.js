@@ -8,6 +8,7 @@ import {connect} from 'react-redux'
 import LyricsFormatOptions from './LyricsFormatOptions'
 import queryString from 'query-string'
 import Line from './Line'
+import {addMessage} from '../../redux/actionCreators'
 
 class SongDetails extends React.PureComponent{
   constructor(){
@@ -43,6 +44,7 @@ class SongDetails extends React.PureComponent{
         this.setState({notFound: true, loading: false})
       }
     })
+    .catch(err => this.props.addMessage(err.toString(), "error"))
   }
 
   renderLyricsBox = () => {
@@ -147,4 +149,4 @@ const mapStateToProps = state => ({
   user: state.currentUser
 })
 
-export default withRouter(connect(mapStateToProps)(SongDetails))
+export default withRouter(connect(mapStateToProps, {addMessage})(SongDetails))

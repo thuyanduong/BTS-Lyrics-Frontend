@@ -2,7 +2,7 @@ import React from 'react'
 import {Header, Modal, Form} from 'semantic-ui-react'
 import {ChromePicker} from 'react-color'
 import {connect} from 'react-redux'
-import {submit} from '../../redux/actionCreators'
+import {submit, addMessage} from '../../redux/actionCreators'
 import {withRouter} from 'react-router-dom'
 import URL from '../../_helpers/url'
 
@@ -12,8 +12,7 @@ class CategoryForm extends React.Component {
     this.state = {
       categoryName : "",
       color: "#000",
-      id: null,
-      error: ""
+      id: null
     }
   }
 
@@ -28,6 +27,7 @@ class CategoryForm extends React.Component {
           id: category.id
         })
       })
+      .catch(err => this.props.addMessage(err.toString(), "error"))
     }
   }
 
@@ -39,7 +39,7 @@ class CategoryForm extends React.Component {
     e.preventDefault()
     e.stopPropagation()
     if(this.state.categoryName === ""){
-      this.setState({error: "error"})
+      this.props.addMessage("Please enter a category title.", "error")
     }else{
       this.props.submit("category", {
         user_id: this.props.user.id,
@@ -101,4 +101,4 @@ const mapStateToProps = state => ({
   user: state.currentUser
 })
 
-export default withRouter(connect(mapStateToProps, {submit})(CategoryForm))
+export default withRouter(connect(mapStateToProps, {submit, addMessage})(CategoryForm))

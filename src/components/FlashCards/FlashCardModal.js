@@ -4,7 +4,7 @@ import FlashCardForm from './FlashCardForm'
 import FlashCardDetails from './FlashCardDetails'
 import {connect} from 'react-redux'
 import URL from '../../_helpers/url'
-import {submit} from '../../redux/actionCreators'
+import {submit, addMessage} from '../../redux/actionCreators'
 
 class FlashCardModal extends React.Component{
   constructor(props){
@@ -74,7 +74,7 @@ class FlashCardModal extends React.Component{
         id: this.state.card.id
       }, options)
     }else{
-      alert(`Error: Flash cards must belong to at least one category. Consider deleting the flash card if it has no category.`)
+      this.props.addMessage(`Error: Flash cards must belong to at least one category. Consider deleting the flash card if it has no category.`, "error")
     }
   }
 
@@ -100,6 +100,7 @@ class FlashCardModal extends React.Component{
           oldCard: card
         })
       })
+      .catch(err => this.props.addMessage(err.toString(), "error"))
     }
   }
 
@@ -125,4 +126,4 @@ const mapStateToProps = state => ({
   categories: state.categories
 })
 
-export default withRouter(connect(mapStateToProps, {submit})(FlashCardModal))
+export default withRouter(connect(mapStateToProps, {submit, addMessage})(FlashCardModal))

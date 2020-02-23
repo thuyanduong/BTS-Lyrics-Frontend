@@ -1,22 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
-
-const Message = props => {
-  return (
-    <div class="ui floating message">
-      <i class="close icon"></i>
-      <p>
-        Way to go!
-      </p>
-    </div>
-  )
-}
+import Message from './Message'
 
 class MessageList extends React.Component {
   render(){
     return (
-      <div style={{position: "absolute", zIndex: 1001}}>
-        {this.props.messageQueue.map(message => <Message/>)}
+      <div>
+        <div className="message-list">
+          {this.props.messageQueue.map(message => <Message key={message.id} message={message}/>)}
+        </div>
       </div>
     )
   }
