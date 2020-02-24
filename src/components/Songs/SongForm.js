@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import {submit, fetchingData} from '../../redux/actionCreators'
 import slugify from '../../_helpers/slugifier'
 import {ScaleLoader} from 'react-spinners'
+import {Modal, Grid} from 'semantic-ui-react'
 
 class SongForm extends React.PureComponent{
   state = {
@@ -20,7 +21,9 @@ class SongForm extends React.PureComponent{
 
     mode: "Add",
     loading: true,
-    notFound: false
+    notFound: false,
+
+    showConfirmation: false
   }
 
   componentDidMount(){
@@ -69,10 +72,6 @@ class SongForm extends React.PureComponent{
     })
   }
 
-  confirmDelete = () => {
-    return window.confirm("Are you sure you want to delete this song?")
-  }
-
   redirect = () => {
     this.props.fetchingData()
     this.props.history.push(`/songs/${slugify(this.state.title)}`)
@@ -93,6 +92,10 @@ class SongForm extends React.PureComponent{
     }
   }
 
+  toggleModal = () => {
+    this.setState({showConfirmation: !this.state.showConfirmation})
+  }
+
   renderButtons(){
     return (this.state.mode === "Add" ?
       (<div>
@@ -109,20 +112,40 @@ class SongForm extends React.PureComponent{
           verify: this.validateFields,
           callback: this.redirect
         })} type="submit" value="Save"/>
-        <input className="ui button basic" id="delete" onClick={(e) => this.onSubmit(e, {
-          method: "DELETE",
-          verify: this.confirmDelete,
-          callback: this.goBack
-        })} type="button" value="Delete"/>
+        <input className="ui button basic" id="delete" onClick={this.toggleModal} type="button" value="Delete"/>
       </div>)
     )
   }
+
+  renderModal = () => (
+    <Modal open={this.state.showConfirmation} onClose={this.toggleModal}>
+      <Modal.Content>
+      <Grid>
+        <Grid.Column textAlign="center">
+          <h2>Are you sure you want to delete this album?
+            <br/>
+            <br/>
+            <button className="ui button"
+            onClick={this.toggleModal}>Cancel</button>
+            <button className="ui primary button"
+            onClick={(e) => this.onSubmit(e, {
+              method: "DELETE",
+              verify: ()=>true,
+              callback: this.redirect
+            })}>Yes, Delete!</button>
+          </h2>
+        </Grid.Column>
+      </Grid>
+      </Modal.Content>
+    </Modal>
+  )
 
   render(){
     return this.props.user && this.props.user.admin ? (
       this.state.loading ? <ScaleLoader /> : (
         this.state.notFound ? <NotFound/> : (
           <div className="ui container segment" style={{backgroundColor: "#f8f8f9"}}>
+            {this.renderModal()}
             <h3>{this.state.mode === "Add" ? "Add New Song" : "Edit Song"}</h3>
             <div className="ui divider hidden"></div>
             <form className="ui form">

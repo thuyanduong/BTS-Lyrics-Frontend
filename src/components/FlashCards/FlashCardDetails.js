@@ -1,6 +1,6 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
-import {Modal} from 'semantic-ui-react'
+import {Modal, Grid} from 'semantic-ui-react'
 import textColor from '../../_helpers/textColor'
 import {submit} from '../../redux/actionCreators'
 import {connect} from 'react-redux'
@@ -8,6 +8,13 @@ import Speech from 'react-speech'
 const ReactMarkdown = require('react-markdown/with-html')
 
 class FlashCardDetails extends React.Component {
+  constructor(){
+    super()
+    this.state = {
+      showConfirmation: false
+    }
+  }
+
   redirect = (url) => {
     this.props.history.push(url)
   }
@@ -30,25 +37,43 @@ class FlashCardDetails extends React.Component {
     this.redirect('/')
   }
 
-  confirmDelete = () => {
-    return window.confirm("Are you sure you want to delete this flash card?")
+  toggleModal = () => {
+    this.setState({showConfirmation: !this.state.showConfirmation})
   }
 
   deleteCard = () => {
-    if(this.confirmDelete()){
-      this.props.submit("card", {
-        id: this.props.card.id
-      }, {
-        method: "DELETE",
-        callback: ()=>{this.props.history.push('/')}
-      })
-    }
+    this.props.submit("card", {
+      id: this.props.card.id
+    }, {
+      method: "DELETE",
+      callback: ()=>{this.props.history.push('/')}
+    })
   }
+
+  renderModal = () => (
+    <Modal open={this.state.showConfirmation} onClose={this.toggleModal}>
+      <Modal.Content>
+      <Grid>
+        <Grid.Column textAlign="center">
+          <h2>Are you sure you want to delete this flash card?
+            <br/>
+            <br/>
+            <button className="ui button"
+            onClick={this.toggleModal}>Cancel</button>
+            <button className="ui primary button"
+            onClick={this.deleteCard}>Yes, Delete!</button>
+          </h2>
+        </Grid.Column>
+      </Grid>
+      </Modal.Content>
+    </Modal>
+  )
 
   render(){
     let {language, card: {korean, english, notes, id}} = this.props
     return (
       <Modal size="large" open={true} onClose={this.close}>
+        {this.renderModal()}
         <Modal.Content>
           <Modal.Description>
             {this.props.card ?
@@ -99,7 +124,7 @@ class FlashCardDetails extends React.Component {
                   <button onClick={()=>this.redirect(`/flash-cards/edit/${id}`)} className="ui primary button">
                     Edit
                   </button>
-                  <button onClick={this.deleteCard} className="ui negative basic button">
+                  <button onClick={this.toggleModal} className="ui negative basic button">
                     Delete
                   </button>
                   <button onClick={this.close} className="ui button">

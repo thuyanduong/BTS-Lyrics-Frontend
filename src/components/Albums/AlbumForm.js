@@ -7,6 +7,7 @@ import moment from 'moment'
 import NotFound from '../NotFound'
 import slugify from '../../_helpers/slugifier'
 import {ScaleLoader} from 'react-spinners'
+import {Modal, Grid} from 'semantic-ui-react'
 
 class AlbumForm extends React.Component{
   state = {
@@ -21,7 +22,9 @@ class AlbumForm extends React.Component{
     albumTypes: [],
     albumLoading: true,
     albumTypesLoading: true,
-    notFound: false
+    notFound: false,
+
+    showConfirmation: false
   }
 
   componentDidMount(){
@@ -88,8 +91,8 @@ class AlbumForm extends React.Component{
     })
   }
 
-  confirmDelete = () => {
-    return window.confirm("Are you sure you want to delete this album?")
+  toggleModal = () => {
+    this.setState({showConfirmation: !this.state.showConfirmation})
   }
 
   redirect = () => {
@@ -112,20 +115,40 @@ class AlbumForm extends React.Component{
           verify: this.validateFields,
           callback: this.redirect
         })} type="submit" value="Save"/>
-        <input className="ui button basic" onClick={(e) => this.onSubmit(e, {
-          method: "DELETE",
-          verify: this.confirmDelete,
-          callback: this.redirect
-        })} type="button" value="Delete"/>
+        <input className="ui button basic" onClick={this.toggleModal} type="button" value="Delete"/>
       </div>)
     )
   }
+
+  renderModal = () => (
+    <Modal open={this.state.showConfirmation} onClose={this.toggleModal}>
+      <Modal.Content>
+      <Grid>
+        <Grid.Column textAlign="center">
+          <h2>Are you sure you want to delete this album?
+            <br/>
+            <br/>
+            <button className="ui button"
+            onClick={this.toggleModal}>Cancel</button>
+            <button className="ui primary button"
+            onClick={(e) => this.onSubmit(e, {
+              method: "DELETE",
+              verify: ()=>true,
+              callback: this.redirect
+            })}>Yes, Delete!</button>
+          </h2>
+        </Grid.Column>
+      </Grid>
+      </Modal.Content>
+    </Modal>
+  )
 
   render(){
     return this.props.user && this.props.user.admin ? (
       this.state.albumTypesLoading || this.state.albumLoading ? <ScaleLoader/> : (
         this.state.notFound ? <NotFound/> : (
           <div className="ui container segment" style={{backgroundColor: "#f8f8f9"}}>
+            {this.renderModal()}
               <h3>{this.state.mode === "Add" ? "Add New Album" : "Edit Album"}</h3>
               <div className="ui divider hidden"></div>
               <form className="ui form">
