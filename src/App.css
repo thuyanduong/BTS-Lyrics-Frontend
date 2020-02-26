@@ -8,7 +8,7 @@
   right: 0;
 }
 
-.ui.message {
+.ui.message.fade {
   width: 500px;
   left: 50%;
   transform: translateX(-50%);
