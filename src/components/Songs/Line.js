@@ -27,6 +27,7 @@ class Line extends React.Component {
 
   textToCopy = () => {
     let {index, lyricsArray, transArray, title} = this.props
+    console.log("hi: ", lyricsArray[index], transArray[index])
     return `[[${title}](${this.props.location.pathname}?line=${lyricsArray[index].trim().replace(/ /g,"%20")})] ${lyricsArray[index]} / ${transArray[index]}`
   }
 

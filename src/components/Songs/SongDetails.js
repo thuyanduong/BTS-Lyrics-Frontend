@@ -50,9 +50,14 @@ class SongDetails extends React.PureComponent{
   renderLyricsBox = () => {
     let lyricsArray = this.state.lyrics.split('\n')
     let transArray = this.state.translation.split('\n')
-    let mainArray = transArray.length > lyricsArray.length ? transArray :lyricsArray
+    while(lyricsArray.length < transArray.length){
+      lyricsArray.push("")
+    }
+    while(transArray.length < lyricsArray.length){
+      transArray.push("")
+    }
     return(
-      mainArray[0].length ? mainArray.map((x, index) => {
+      lyricsArray[0].length ? lyricsArray.map((x, index) => {
         return (
           <div className="ui grid" key={index}>
             {this.renderRow(index, lyricsArray, transArray)}
